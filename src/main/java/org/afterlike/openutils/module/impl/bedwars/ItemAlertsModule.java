@@ -30,7 +30,8 @@ public class ItemAlertsModule extends Module {
 	private static final long COOLDOWN_TIME = 10_000L;
 	private final Item potionJump, potionSpeed, potionInvis, machineGunBow, charlieUnicorn,
 			iceBridge, sleepingDust, devastatorBow, miracleStars, bridgeZapper, shuriken,
-			blockShuffler, unstableTeleport, snowman, popupTower, dreamDefender;
+			blockShuffler, unstableTeleport, snowman, popupTower, dreamDefender, megaTnt,
+			windCharge;
 	private final DescriptionSetting desc;
 	private final ModeSetting pingSound;
 	private final BooleanSetting detectIronSword, detectDiamondSword, detectFireball,
@@ -59,6 +60,8 @@ public class ItemAlertsModule extends Module {
 		snowman = new Item();
 		popupTower = new Item();
 		dreamDefender = new Item();
+		megaTnt = new Item();
+		windCharge = new Item();
 		desc = this
 				.registerSetting(new DescriptionSetting("Alerts you when players purchase items"));
 		pingSound = this
@@ -137,6 +140,10 @@ public class ItemAlertsModule extends Module {
 				detectSpecialItems, MatchType.NAME_SUBSTRING, "unstable teleportation device"));
 		addRule(new ItemRule(snowman, "§6Snowman", false, detectSpecialItems,
 				MatchType.NAME_SUBSTRING, "snowman"));
+		addRule(new ItemRule(megaTnt, "§fMega §cT§fN§cT", false, detectSpecialItems,
+				MatchType.NAME_SUBSTRING, "mega tnt"));
+		addRule(new ItemRule(windCharge, "§fWind Charge", false, detectSpecialItems,
+				MatchType.NAME_SUBSTRING, "wind charge"));
 	}
 
 	private void addRule(final ItemRule rule) {
