@@ -16,7 +16,6 @@ import org.afterlike.openutils.module.api.hud.HudModule;
 import org.afterlike.openutils.module.api.hud.Position;
 import org.afterlike.openutils.module.api.setting.Setting;
 import org.afterlike.openutils.module.api.setting.impl.BooleanSetting;
-import org.afterlike.openutils.module.api.setting.impl.DescriptionSetting;
 import org.afterlike.openutils.util.client.ClientUtil;
 import org.afterlike.openutils.util.client.TextUtil;
 import org.afterlike.openutils.util.game.BedWarsUtil;
@@ -30,12 +29,11 @@ public class FinalKillsHudModule extends Module implements HudModule {
 	private final BooleanSetting teammatesOnly;
 	private final Map<String, Integer> finalKills = new HashMap<>();
 	private static final String VOID_KEY = "§8Void";
-	private static final Pattern NAME_CHUNK_PATTERN = Pattern
-			.compile("§([0-9a-fk-or])([A-Za-z0-9_]+)");
+	private static final Pattern FINAL_KILL_MARKER_PATTERN = Pattern.compile(
+			"(?:§[0-9a-fk-or]\\s*)*FINAL\\s+(?:§[0-9a-fk-or]\\s*)*KILL!", Pattern.CASE_INSENSITIVE);
 	private BedWarsUtil.TeamColor playerTeamColor = null;
 	public FinalKillsHudModule() {
 		super("Final Kills HUD", ModuleCategory.BEDWARS);
-		this.registerSetting(new DescriptionSetting("Hypixel language must be ENGLISH!"));
 		editPosition = this.registerSetting(new BooleanSetting("Edit position", false));
 		dropShadow = this.registerSetting(new BooleanSetting("Drop shadow", true));
 		showVoidKills = this.registerSetting(new BooleanSetting("Show void kills", true));
@@ -49,20 +47,17 @@ public class FinalKillsHudModule extends Module implements HudModule {
 		if (GameModeUtil.getBedWarsStatus() != 3)
 			return;
 		final String message = event.getMessage();
-		if (!message.contains("§b§lFINAL KILL!§r"))
+		final Matcher finalKillMarker = FINAL_KILL_MARKER_PATTERN.matcher(message);
+		if (!finalKillMarker.find())
 			return;
-		final String body = message.substring(0, message.indexOf("§b§lFINAL KILL!§r")).trim();
-		final Matcher matcher = NAME_CHUNK_PATTERN.matcher(body);
-		String lastColorCode = null;
-		String lastPlayerName = null;
-		while (matcher.find()) {
-			lastColorCode = "§" + matcher.group(1);
-			lastPlayerName = matcher.group(2);
-		}
-		if (lastColorCode == null || lastPlayerName == null) {
+		final String body = message.substring(0, finalKillMarker.start()).trim();
+		final NameChunk nameChunk = findLastNameChunk(body);
+		if (nameChunk == null) {
 			ClientUtil.sendDebugMessage("no name chunks found in: " + body);
 			return;
 		}
+		final String lastColorCode = nameChunk.colorCode;
+		final String lastPlayerName = nameChunk.name;
 		final String unformattedName = TextUtil.stripColorCodes(lastColorCode + lastPlayerName);
 		if (unformattedName.equalsIgnoreCase("void")) {
 			if (showVoidKills.getValue()) {
@@ -171,5 +166,84 @@ public class FinalKillsHudModule extends Module implements HudModule {
 	@Override
 	public boolean useHudDropShadow() {
 		return dropShadow.getValue();
+	}
+
+	private static NameChunk findLastNameChunk(final String formattedText) {
+		String activeColorCode = null;
+		NameChunk lastNameChunk = null;
+		int index = 0;
+		while (index < formattedText.length()) {
+			final char current = formattedText.charAt(index);
+			if (isFormattingCode(formattedText, index)) {
+				activeColorCode = updateActiveColor(activeColorCode,
+						formattedText.charAt(index + 1));
+				index += 2;
+				continue;
+			}
+			if (isUsernameCharacter(current)) {
+				final String tokenColorCode = activeColorCode;
+				final StringBuilder token = new StringBuilder();
+				while (index < formattedText.length()) {
+					final char tokenChar = formattedText.charAt(index);
+					if (isFormattingCode(formattedText, index)) {
+						activeColorCode = updateActiveColor(activeColorCode,
+								formattedText.charAt(index + 1));
+						index += 2;
+						continue;
+					}
+					if (!isUsernameCharacter(tokenChar))
+						break;
+					token.append(tokenChar);
+					index++;
+				}
+				final String name = token.toString();
+				if (isNameChunk(tokenColorCode, name)) {
+					lastNameChunk = new NameChunk(tokenColorCode, name);
+				}
+				continue;
+			}
+			index++;
+		}
+		return lastNameChunk;
+	}
+
+	private static boolean isFormattingCode(final String text, final int index) {
+		return text.charAt(index) == '§' && index + 1 < text.length();
+	}
+
+	private static String updateActiveColor(final String activeColorCode, final char code) {
+		final char normalizedCode = Character.toLowerCase(code);
+		if (isColorCode(normalizedCode)) {
+			return "§" + normalizedCode;
+		}
+		if (normalizedCode == 'r') {
+			return null;
+		}
+		return activeColorCode;
+	}
+
+	private static boolean isColorCode(final char code) {
+		return code >= '0' && code <= '9' || code >= 'a' && code <= 'f';
+	}
+
+	private static boolean isUsernameCharacter(final char character) {
+		return character >= 'a' && character <= 'z' || character >= 'A' && character <= 'Z'
+				|| character >= '0' && character <= '9' || character == '_';
+	}
+
+	private static boolean isNameChunk(final String colorCode, final String name) {
+		return isPlayerName(name) && BedWarsUtil.TeamColor.fromColorCode(colorCode) != null;
+	}
+
+	private static boolean isPlayerName(final String name) {
+		return name.length() >= 1 && name.length() <= 16;
+	}
+	private static final class NameChunk {
+		private final String colorCode;
+		private final String name;
+		private NameChunk(final String colorCode, final String name) {
+			this.colorCode = colorCode;
+			this.name = name;
+		}
 	}
 }

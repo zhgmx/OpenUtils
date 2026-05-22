@@ -44,7 +44,7 @@ public class GameModeUtil {
 			return 2;
 		}
 		// in game
-		if (sb.get(5).contains("§cR") && sb.get(6).contains("§9B")) {
+		if (sb.get(5).contains("§c") && sb.get(6).contains("§9")) {
 			return 3;
 		}
 		return 0;
