@@ -9,13 +9,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import org.afterlike.openutils.event.api.EventPhase;
-import org.afterlike.openutils.event.handler.EventHandler;
 import org.afterlike.openutils.event.impl.GameTickEvent;
 import org.afterlike.openutils.event.impl.WorldLoadEvent;
 import org.afterlike.openutils.module.api.Module;
 import org.afterlike.openutils.module.api.ModuleCategory;
 import org.afterlike.openutils.module.api.setting.impl.BooleanSetting;
 import org.afterlike.openutils.util.client.ClientUtil;
+import re.tsuku.fastbus.Subscribe;
 
 public class DenickerModule extends Module {
 	private final BooleanSetting showFailed;
@@ -254,7 +254,7 @@ public class DenickerModule extends Module {
 		showFailed = this.registerSetting(new BooleanSetting("Show failed denicks", true));
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onTick(final GameTickEvent event) {
 		if (event.getPhase() != EventPhase.POST)
 			return;
@@ -270,7 +270,7 @@ public class DenickerModule extends Module {
 		}
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onWorldJoin(final WorldLoadEvent event) {
 		parsed.clear();
 	}

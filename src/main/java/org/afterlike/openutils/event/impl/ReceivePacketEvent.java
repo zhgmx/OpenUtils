@@ -1,7 +1,7 @@
 package org.afterlike.openutils.event.impl;
 
 import net.minecraft.network.Packet;
-import org.afterlike.openutils.event.api.Event;
+import re.tsuku.fastbus.Event;
 
 public class ReceivePacketEvent implements Event {
 	private final Packet<?> packet;

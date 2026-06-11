@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.afterlike.openutils.event.api.EventPhase;
-import org.afterlike.openutils.event.handler.EventHandler;
 import org.afterlike.openutils.event.impl.GameTickEvent;
 import org.afterlike.openutils.event.impl.ReceiveChatEvent;
 import org.afterlike.openutils.event.impl.RenderOverlayEvent;
@@ -20,6 +19,7 @@ import org.afterlike.openutils.util.client.ClientUtil;
 import org.afterlike.openutils.util.client.TextUtil;
 import org.afterlike.openutils.util.game.BedWarsUtil;
 import org.afterlike.openutils.util.game.GameModeUtil;
+import re.tsuku.fastbus.Subscribe;
 
 public class FinalKillsHudModule extends Module implements HudModule {
 	private final Position position = new Position(5, 50);
@@ -42,7 +42,7 @@ public class FinalKillsHudModule extends Module implements HudModule {
 		teammatesOnly = this.registerSetting(new BooleanSetting("Teammates only", false));
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onChatReceived(final ReceiveChatEvent event) {
 		if (!ClientUtil.notNull())
 			return;
@@ -83,7 +83,7 @@ public class FinalKillsHudModule extends Module implements HudModule {
 				"counted kill for " + displayName + ": " + finalKills.get(displayName));
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onRender(final RenderOverlayEvent event) {
 		if (!ClientUtil.notNull())
 			return;
@@ -107,7 +107,7 @@ public class FinalKillsHudModule extends Module implements HudModule {
 		});
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onTick(final GameTickEvent event) {
 		if (event.getPhase() != EventPhase.POST)
 			return;
@@ -122,7 +122,7 @@ public class FinalKillsHudModule extends Module implements HudModule {
 		}
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onWorldLoad(final WorldLoadEvent event) {
 		resetTracking();
 	}

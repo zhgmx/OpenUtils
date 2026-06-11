@@ -6,13 +6,13 @@ import java.util.Objects;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.afterlike.openutils.config.handler.ConfigHandler;
-import org.afterlike.openutils.event.api.EventBus;
 import org.afterlike.openutils.gui.ClickGuiScreen;
 import org.afterlike.openutils.module.handler.ModuleHandler;
 import org.afterlike.openutils.util.client.UpdateUtil;
 import org.afterlike.openutils.util.lang.ReflectionUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import re.tsuku.fastbus.FastBus;
 
 public class OpenUtils {
 	private static final Logger logger = LogManager.getLogger(OpenUtils.class);
@@ -23,12 +23,12 @@ public class OpenUtils {
 	private static volatile boolean notified = false;
 	private final ModuleHandler moduleHandler;
 	private final ConfigHandler configHandler;
-	private final EventBus eventBus;
+	private final FastBus eventBus;
 	private ClickGuiScreen clickGuiScreen;
 	public OpenUtils() {
 		this.moduleHandler = new ModuleHandler();
 		this.configHandler = new ConfigHandler();
-		this.eventBus = new EventBus();
+		this.eventBus = new FastBus();
 	}
 
 	public void initialize() {
@@ -52,7 +52,7 @@ public class OpenUtils {
 		UpdateUtil.checkAsync();
 	}
 
-	public EventBus getEventBus() {
+	public FastBus getEventBus() {
 		return eventBus;
 	}
 

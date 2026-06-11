@@ -9,7 +9,6 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.S04PacketEntityEquipment;
 import net.minecraft.util.EnumChatFormatting;
-import org.afterlike.openutils.event.handler.EventHandler;
 import org.afterlike.openutils.event.impl.ReceivePacketEvent;
 import org.afterlike.openutils.event.impl.WorldLoadEvent;
 import org.afterlike.openutils.module.api.Module;
@@ -20,6 +19,7 @@ import org.afterlike.openutils.module.api.setting.impl.ModeSetting;
 import org.afterlike.openutils.util.client.ClientUtil;
 import org.afterlike.openutils.util.game.BedWarsUtil;
 import org.afterlike.openutils.util.game.GameModeUtil;
+import re.tsuku.fastbus.Subscribe;
 
 public class ArmorAlertsModule extends Module {
 	private final DescriptionSetting desc;
@@ -43,7 +43,7 @@ public class ArmorAlertsModule extends Module {
 		playerArmor = new HashMap<>();
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onPacket(final ReceivePacketEvent event) {
 		if (!ClientUtil.notNull())
 			return;
@@ -158,7 +158,7 @@ public class ArmorAlertsModule extends Module {
 		return new DecimalFormat("#").format(player.getDistanceToEntity(mc.thePlayer)) + "m";
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onWorldLoad(final WorldLoadEvent event) {
 		playerArmor.clear();
 	}

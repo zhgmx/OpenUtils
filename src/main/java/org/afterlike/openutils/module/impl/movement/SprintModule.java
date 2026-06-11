@@ -1,19 +1,19 @@
 package org.afterlike.openutils.module.impl.movement;
 
 import org.afterlike.openutils.event.api.EventPhase;
-import org.afterlike.openutils.event.handler.EventHandler;
 import org.afterlike.openutils.event.impl.GameTickEvent;
 import org.afterlike.openutils.module.api.Module;
 import org.afterlike.openutils.module.api.ModuleCategory;
 import org.afterlike.openutils.platform.mixin.minecraft.client.settings.KeyBindingAccessor;
 import org.afterlike.openutils.util.client.ClientUtil;
+import re.tsuku.fastbus.Subscribe;
 
 public class SprintModule extends Module {
 	public SprintModule() {
 		super("Sprint", ModuleCategory.MOVEMENT);
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onTick(final GameTickEvent event) {
 		if (event.getPhase() != EventPhase.PRE)
 			return;

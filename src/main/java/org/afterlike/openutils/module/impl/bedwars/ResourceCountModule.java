@@ -7,7 +7,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import org.afterlike.openutils.event.api.EventPhase;
-import org.afterlike.openutils.event.handler.EventHandler;
 import org.afterlike.openutils.event.impl.GameTickEvent;
 import org.afterlike.openutils.module.api.Module;
 import org.afterlike.openutils.module.api.ModuleCategory;
@@ -15,6 +14,7 @@ import org.afterlike.openutils.module.api.setting.impl.BooleanSetting;
 import org.afterlike.openutils.module.api.setting.impl.DescriptionSetting;
 import org.afterlike.openutils.util.client.ClientUtil;
 import org.afterlike.openutils.util.game.GameModeUtil;
+import re.tsuku.fastbus.Subscribe;
 
 // TODO: rewrite - currently a direct port from meowtils
 public class ResourceCountModule extends Module {
@@ -35,7 +35,7 @@ public class ResourceCountModule extends Module {
 		pingSound = this.registerSetting(new BooleanSetting("Ping Sound", false));
 	}
 	private final Map<Item, Integer> lastCounts = new HashMap<>();
-	@EventHandler
+	@Subscribe
 	private void onTick(final GameTickEvent event) {
 		if (event.getPhase() != EventPhase.POST)
 			return;

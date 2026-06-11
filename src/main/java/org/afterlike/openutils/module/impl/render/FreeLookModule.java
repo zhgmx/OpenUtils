@@ -1,6 +1,5 @@
 package org.afterlike.openutils.module.impl.render;
 
-import org.afterlike.openutils.event.handler.EventHandler;
 import org.afterlike.openutils.event.impl.GameTickEvent;
 import org.afterlike.openutils.event.impl.WorldLoadEvent;
 import org.afterlike.openutils.module.api.Module;
@@ -8,6 +7,7 @@ import org.afterlike.openutils.module.api.ModuleCategory;
 import org.afterlike.openutils.module.api.setting.impl.BooleanSetting;
 import org.afterlike.openutils.module.api.setting.impl.DescriptionSetting;
 import org.afterlike.openutils.util.client.ClientUtil;
+import re.tsuku.fastbus.Subscribe;
 
 public class FreeLookModule extends Module {
 	private final BooleanSetting lockYaw;
@@ -89,14 +89,14 @@ public class FreeLookModule extends Module {
 		return sensitivity * sensitivity * sensitivity * 8.0f;
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onWorldLoad(final WorldLoadEvent event) {
 		if (isEnabled()) {
 			setEnabled(false);
 		}
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onGameTick(final GameTickEvent event) {
 		if (isEnabled() && mc.currentScreen != null) {
 			setEnabled(false);

@@ -2,7 +2,6 @@ package org.afterlike.openutils.module.impl.render;
 
 import java.util.*;
 import org.afterlike.openutils.OpenUtils;
-import org.afterlike.openutils.event.handler.EventHandler;
 import org.afterlike.openutils.event.impl.RenderOverlayEvent;
 import org.afterlike.openutils.module.api.Module;
 import org.afterlike.openutils.module.api.ModuleCategory;
@@ -12,6 +11,7 @@ import org.afterlike.openutils.module.api.setting.Setting;
 import org.afterlike.openutils.module.api.setting.impl.BooleanSetting;
 import org.afterlike.openutils.util.client.ClientUtil;
 import org.afterlike.openutils.util.game.RenderUtil;
+import re.tsuku.fastbus.Subscribe;
 
 public class ArrayListModule extends Module implements HudModule {
 	private final Position position = new Position(5, 70);
@@ -39,7 +39,7 @@ public class ArrayListModule extends Module implements HudModule {
 		super.onSettingChanged(setting);
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onRenderOverlay(final RenderOverlayEvent event) {
 		if (!ClientUtil.notNull())
 			return;

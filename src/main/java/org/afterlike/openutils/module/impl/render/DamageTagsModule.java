@@ -6,7 +6,6 @@ import java.util.*;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
 import org.afterlike.openutils.event.api.EventPhase;
-import org.afterlike.openutils.event.handler.EventHandler;
 import org.afterlike.openutils.event.impl.GameTickEvent;
 import org.afterlike.openutils.event.impl.RenderWorldEvent;
 import org.afterlike.openutils.event.impl.ResizeWindowEvent;
@@ -22,6 +21,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
+import re.tsuku.fastbus.Subscribe;
 
 public class DamageTagsModule extends Module {
 	private final BooleanSetting showHealing;
@@ -68,7 +68,7 @@ public class DamageTagsModule extends Module {
 		yOffset = this.registerSetting(new NumberSetting("Y Offset", 1.8, -2.0, 3.0, 0.1));
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onTick(final GameTickEvent event) {
 		if (event.getPhase() != EventPhase.POST)
 			return;
@@ -144,7 +144,7 @@ public class DamageTagsModule extends Module {
 		}
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onRenderWorld(final RenderWorldEvent event) {
 		if (!ClientUtil.notNull())
 			return;
@@ -275,12 +275,12 @@ public class DamageTagsModule extends Module {
 		}
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onWorldLoad(final WorldLoadEvent event) {
 		clearAll();
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onResize(final ResizeWindowEvent event) {
 		cachedScaleFactor = -1;
 	}

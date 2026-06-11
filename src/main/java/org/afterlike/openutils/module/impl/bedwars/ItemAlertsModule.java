@@ -12,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.play.server.S04PacketEntityEquipment;
 import net.minecraft.util.EnumChatFormatting;
-import org.afterlike.openutils.event.handler.EventHandler;
 import org.afterlike.openutils.event.impl.ReceivePacketEvent;
 import org.afterlike.openutils.event.impl.WorldLoadEvent;
 import org.afterlike.openutils.module.api.Module;
@@ -24,6 +23,7 @@ import org.afterlike.openutils.util.client.ClientUtil;
 import org.afterlike.openutils.util.client.TextUtil;
 import org.afterlike.openutils.util.game.BedWarsUtil;
 import org.afterlike.openutils.util.game.GameModeUtil;
+import re.tsuku.fastbus.Subscribe;
 
 // TODO: we should probably rewrite at some point...
 public class ItemAlertsModule extends Module {
@@ -151,7 +151,7 @@ public class ItemAlertsModule extends Module {
 		rulesByItem.put(rule.item, rule);
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onPacket(final ReceivePacketEvent event) {
 		if (!ClientUtil.notNull()) {
 			return;
@@ -266,7 +266,7 @@ public class ItemAlertsModule extends Module {
 		return true;
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onWorldLoad(final WorldLoadEvent event) {
 		alerts.clear();
 	}

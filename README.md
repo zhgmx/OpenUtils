@@ -34,27 +34,9 @@ OpenUtils is designed to be:
 
 ## Credits
 
-- **Azura-Event-Bus** - © 2025 Azura (MIT License)  
-  https://github.com/azura-client/Azura-Event-Bus
 - **Click GUI Design** - ported from **raven b3**  
   https://www.youtube.com/@blowsy  
   https://www.youtube.com/watch?v=FCPr6S1bLis
-
----
-
-## Included Third-Party Code
-
-### Azura-Event-Bus
-
-This project includes a copied and lightly adapted event bus implementation from the Azura-Event-Bus project.
-
-- **Project:** Azura-Event-Bus
-- **Source:** https://github.com/azura-client/Azura-Event-Bus
-- **License:** MIT License
-- **Copyright:** © 2025 Azura
-
-The Azura-Event-Bus remains licensed under the MIT License.  
-All required license notices are preserved in the source files where it is used.
 
 ---
 
@@ -68,12 +50,6 @@ This means:
 - You are free to use, modify, and redistribute OpenUtils
 - Any distributed derivative works **must remain open-source**
 - Modifications must be provided under the same license
-
-### License Compatibility
-- OpenUtils (GPL-3.0)
-- Azura Event Bus (MIT)
-
----
 
 ## Disclaimer
 

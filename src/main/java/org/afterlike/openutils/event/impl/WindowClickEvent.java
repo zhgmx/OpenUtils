@@ -2,7 +2,7 @@ package org.afterlike.openutils.event.impl;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Slot;
-import org.afterlike.openutils.event.api.CancellableEvent;
+import re.tsuku.fastbus.CancellableEvent;
 
 public class WindowClickEvent extends CancellableEvent {
 	private final GuiContainer container;

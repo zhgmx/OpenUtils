@@ -3,7 +3,6 @@ package org.afterlike.openutils.module.handler;
 import java.util.*;
 import net.minecraft.client.Minecraft;
 import org.afterlike.openutils.OpenUtils;
-import org.afterlike.openutils.event.handler.EventHandler;
 import org.afterlike.openutils.event.impl.KeyPressEvent;
 import org.afterlike.openutils.module.api.Module;
 import org.afterlike.openutils.module.api.ModuleCategory;
@@ -15,6 +14,7 @@ import org.afterlike.openutils.module.impl.player.*;
 import org.afterlike.openutils.module.impl.render.*;
 import org.afterlike.openutils.module.impl.world.*;
 import org.afterlike.openutils.util.client.ClientUtil;
+import re.tsuku.fastbus.Subscribe;
 
 public class ModuleHandler {
 	private final Minecraft mc = Minecraft.getMinecraft();
@@ -100,7 +100,7 @@ public class ModuleHandler {
 		return modulesInCategory;
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onKeyPress(final KeyPressEvent event) {
 		if (mc.currentScreen != null || !ClientUtil.notNull()) {
 			return;

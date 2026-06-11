@@ -6,7 +6,6 @@ import java.util.Set;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.IInventory;
-import org.afterlike.openutils.event.handler.EventHandler;
 import org.afterlike.openutils.event.impl.WindowClickEvent;
 import org.afterlike.openutils.module.api.Module;
 import org.afterlike.openutils.module.api.ModuleCategory;
@@ -14,6 +13,7 @@ import org.afterlike.openutils.module.api.setting.impl.DescriptionSetting;
 import org.afterlike.openutils.util.client.ClientUtil;
 import org.afterlike.openutils.util.client.TextUtil;
 import org.afterlike.openutils.util.game.GameModeUtil;
+import re.tsuku.fastbus.Subscribe;
 
 public class QuickShopModule extends Module {
 	private final DescriptionSetting desc;
@@ -31,7 +31,7 @@ public class QuickShopModule extends Module {
 	private static final Set<String> SHOP_TITLES = new HashSet<>(
 			Arrays.asList("quick buy", "upgrades & traps", "blocks", "melee", "armor", "tools",
 					"ranged", "potions", "utility", "rotating items"));
-	@EventHandler
+	@Subscribe
 	private void onWindowClick(final WindowClickEvent event) {
 		if (!ClientUtil.notNull())
 			return;

@@ -1,6 +1,6 @@
 package org.afterlike.openutils.event.impl;
 
-import org.afterlike.openutils.event.api.Event;
+import re.tsuku.fastbus.Event;
 
 public class RenderOverlayEvent implements Event {
 	private final float partialTicks;

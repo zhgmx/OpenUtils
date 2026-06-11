@@ -10,7 +10,6 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.server.S04PacketEntityEquipment;
-import org.afterlike.openutils.event.handler.EventHandler;
 import org.afterlike.openutils.event.impl.ReceivePacketEvent;
 import org.afterlike.openutils.event.impl.WorldLoadEvent;
 import org.afterlike.openutils.module.api.Module;
@@ -20,6 +19,7 @@ import org.afterlike.openutils.module.api.setting.impl.DescriptionSetting;
 import org.afterlike.openutils.util.client.ClientUtil;
 import org.afterlike.openutils.util.game.BedWarsUtil;
 import org.afterlike.openutils.util.game.GameModeUtil;
+import re.tsuku.fastbus.Subscribe;
 
 public class UpgradeAlertsModule extends Module {
 	private final BooleanSetting pingSound;
@@ -32,7 +32,7 @@ public class UpgradeAlertsModule extends Module {
 		teamUpgrades = new HashMap<>();
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onPacket(final ReceivePacketEvent event) {
 		if (!ClientUtil.notNull())
 			return;
@@ -69,7 +69,7 @@ public class UpgradeAlertsModule extends Module {
 		}
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onWorldLoad(final WorldLoadEvent event) {
 		teamUpgrades.clear();
 	}

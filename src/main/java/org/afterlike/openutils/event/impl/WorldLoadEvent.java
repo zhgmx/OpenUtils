@@ -1,7 +1,7 @@
 package org.afterlike.openutils.event.impl;
 
 import net.minecraft.client.multiplayer.WorldClient;
-import org.afterlike.openutils.event.api.Event;
+import re.tsuku.fastbus.Event;
 
 public class WorldLoadEvent implements Event {
 	private final WorldClient world;

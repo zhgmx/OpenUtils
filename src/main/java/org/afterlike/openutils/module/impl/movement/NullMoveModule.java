@@ -2,7 +2,6 @@ package org.afterlike.openutils.module.impl.movement;
 
 import net.minecraft.client.settings.KeyBinding;
 import org.afterlike.openutils.event.api.EventPhase;
-import org.afterlike.openutils.event.handler.EventHandler;
 import org.afterlike.openutils.event.impl.GameTickEvent;
 import org.afterlike.openutils.event.impl.KeyPressEvent;
 import org.afterlike.openutils.module.api.Module;
@@ -10,6 +9,7 @@ import org.afterlike.openutils.module.api.ModuleCategory;
 import org.afterlike.openutils.module.api.setting.impl.DescriptionSetting;
 import org.afterlike.openutils.platform.mixin.minecraft.client.settings.KeyBindingAccessor;
 import org.afterlike.openutils.util.client.ClientUtil;
+import re.tsuku.fastbus.Subscribe;
 
 public class NullMoveModule extends Module {
 	private final DescriptionSetting description;
@@ -19,7 +19,7 @@ public class NullMoveModule extends Module {
 				"Prevents opposite movement inputs from canceling each other"));
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onKeyPress(final KeyPressEvent event) {
 		if (!ClientUtil.notNull())
 			return;
@@ -55,7 +55,7 @@ public class NullMoveModule extends Module {
 		}
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onTick(final GameTickEvent event) {
 		if (!ClientUtil.notNull())
 			return;
