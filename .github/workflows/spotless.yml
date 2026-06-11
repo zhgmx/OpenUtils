@@ -5,6 +5,13 @@ on:
     branches: ["**"]
   pull_request:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: spotless-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   spotless:
     runs-on: ubuntu-latest
@@ -23,4 +30,4 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run Spotless
-        run: ./gradlew spotlessCheck
+        run: ./gradlew spotlessCheck --build-cache
