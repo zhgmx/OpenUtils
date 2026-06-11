@@ -1,7 +1,6 @@
 package org.afterlike.openutils.module.impl.render;
 
 import org.afterlike.openutils.event.api.EventPhase;
-import org.afterlike.openutils.event.handler.EventHandler;
 import org.afterlike.openutils.event.impl.GameTickEvent;
 import org.afterlike.openutils.module.api.Module;
 import org.afterlike.openutils.module.api.ModuleCategory;
@@ -9,6 +8,7 @@ import org.afterlike.openutils.module.api.setting.impl.DescriptionSetting;
 import org.afterlike.openutils.module.api.setting.impl.NumberSetting;
 import org.afterlike.openutils.platform.mixin.minecraft.client.renderer.EntityRendererAccessor;
 import org.afterlike.openutils.util.client.ClientUtil;
+import re.tsuku.fastbus.Subscribe;
 
 public class CameraModule extends Module {
 	private final DescriptionSetting description1;
@@ -24,7 +24,7 @@ public class CameraModule extends Module {
 				.registerSetting(new NumberSetting("Hurt Shake Multiplier", 0, -40, 40, 1));
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onTick(final GameTickEvent event) {
 		if (event.getPhase() != EventPhase.PRE)
 			return;

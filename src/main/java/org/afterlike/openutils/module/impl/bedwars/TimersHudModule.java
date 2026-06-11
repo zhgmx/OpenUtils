@@ -6,7 +6,6 @@ import java.util.function.IntUnaryOperator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.afterlike.openutils.event.api.EventPhase;
-import org.afterlike.openutils.event.handler.EventHandler;
 import org.afterlike.openutils.event.impl.GameTickEvent;
 import org.afterlike.openutils.event.impl.RenderOverlayEvent;
 import org.afterlike.openutils.module.api.Module;
@@ -20,6 +19,7 @@ import org.afterlike.openutils.util.client.ClientUtil;
 import org.afterlike.openutils.util.client.TextUtil;
 import org.afterlike.openutils.util.game.GameModeUtil;
 import org.afterlike.openutils.util.game.WorldUtil;
+import re.tsuku.fastbus.Subscribe;
 
 public class TimersHudModule extends Module implements HudModule {
 	private final Position position = new Position(5, 150);
@@ -72,7 +72,7 @@ public class TimersHudModule extends Module implements HudModule {
 		showElapsedTime = this.registerSetting(new BooleanSetting("Show game time", false));
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onTick(final GameTickEvent event) {
 		if (event.getPhase() != EventPhase.POST)
 			return;
@@ -93,7 +93,7 @@ public class TimersHudModule extends Module implements HudModule {
 		}
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onRender(final RenderOverlayEvent event) {
 		if (!ClientUtil.notNull() || mc.gameSettings.showDebugInfo || !inGame) {
 			return;

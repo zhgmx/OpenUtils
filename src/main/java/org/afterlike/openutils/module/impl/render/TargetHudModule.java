@@ -4,7 +4,6 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 import net.minecraft.entity.player.EntityPlayer;
-import org.afterlike.openutils.event.handler.EventHandler;
 import org.afterlike.openutils.event.impl.AttackEntityEvent;
 import org.afterlike.openutils.event.impl.RenderOverlayEvent;
 import org.afterlike.openutils.event.impl.WorldLoadEvent;
@@ -17,6 +16,7 @@ import org.afterlike.openutils.module.api.setting.impl.BooleanSetting;
 import org.afterlike.openutils.module.api.setting.impl.NumberSetting;
 import org.afterlike.openutils.util.client.ClientUtil;
 import org.afterlike.openutils.util.game.RenderUtil;
+import re.tsuku.fastbus.Subscribe;
 
 public class TargetHudModule extends Module implements HudModule {
 	private static final DecimalFormat HEALTH_FORMAT = new DecimalFormat("0.0",
@@ -58,13 +58,13 @@ public class TargetHudModule extends Module implements HudModule {
 		previousTarget = null;
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onWorldLoad(final WorldLoadEvent event) {
 		target = null;
 		previousTarget = null;
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onAttack(AttackEntityEvent event) {
 		if (event.getTarget() instanceof EntityPlayer) {
 			target = (EntityPlayer) event.getTarget();
@@ -72,7 +72,7 @@ public class TargetHudModule extends Module implements HudModule {
 		}
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onRender(RenderOverlayEvent event) {
 		if (!ClientUtil.notNull() || target == null) {
 			return;

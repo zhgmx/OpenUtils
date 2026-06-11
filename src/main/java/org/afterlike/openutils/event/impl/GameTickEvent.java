@@ -1,7 +1,7 @@
 package org.afterlike.openutils.event.impl;
 
-import org.afterlike.openutils.event.api.Event;
 import org.afterlike.openutils.event.api.EventPhase;
+import re.tsuku.fastbus.Event;
 
 public class GameTickEvent implements Event {
 	private final EventPhase phase;

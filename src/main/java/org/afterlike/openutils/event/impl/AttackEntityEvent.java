@@ -2,7 +2,7 @@ package org.afterlike.openutils.event.impl;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import org.afterlike.openutils.event.api.Event;
+import re.tsuku.fastbus.Event;
 
 public class AttackEntityEvent implements Event {
 	private final EntityPlayer playerIn;

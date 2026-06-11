@@ -2,7 +2,6 @@ package org.afterlike.openutils.module.impl.player;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.server.S19PacketEntityStatus;
-import org.afterlike.openutils.event.handler.EventHandler;
 import org.afterlike.openutils.event.impl.AttackEntityEvent;
 import org.afterlike.openutils.event.impl.ReceivePacketEvent;
 import org.afterlike.openutils.module.api.Module;
@@ -10,6 +9,7 @@ import org.afterlike.openutils.module.api.ModuleCategory;
 import org.afterlike.openutils.module.api.setting.impl.BooleanSetting;
 import org.afterlike.openutils.module.api.setting.impl.DescriptionSetting;
 import org.afterlike.openutils.util.client.ClientUtil;
+import re.tsuku.fastbus.Subscribe;
 
 public class ActionSoundsModule extends Module {
 	private final DescriptionSetting desc;
@@ -23,7 +23,7 @@ public class ActionSoundsModule extends Module {
 		crit = this.registerSetting(new BooleanSetting("Critical hit", true));
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onPacketReceived(final ReceivePacketEvent event) {
 		if (!ClientUtil.notNull())
 			return;
@@ -41,7 +41,7 @@ public class ActionSoundsModule extends Module {
 		}
 	}
 
-	@EventHandler
+	@Subscribe
 	public void onAttackEntity(final AttackEntityEvent event) {
 		if (!ClientUtil.notNull())
 			return;

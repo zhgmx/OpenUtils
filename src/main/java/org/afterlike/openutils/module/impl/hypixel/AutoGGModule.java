@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import org.afterlike.openutils.event.api.EventPhase;
-import org.afterlike.openutils.event.handler.EventHandler;
 import org.afterlike.openutils.event.impl.GameTickEvent;
 import org.afterlike.openutils.event.impl.ReceiveChatEvent;
 import org.afterlike.openutils.module.api.Module;
@@ -13,6 +12,7 @@ import org.afterlike.openutils.module.api.setting.impl.NumberSetting;
 import org.afterlike.openutils.module.api.setting.impl.TextFieldSetting;
 import org.afterlike.openutils.util.client.ClientUtil;
 import org.afterlike.openutils.util.client.TextUtil;
+import re.tsuku.fastbus.Subscribe;
 
 public class AutoGGModule extends Module {
 	private final NumberSetting delay;
@@ -46,7 +46,7 @@ public class AutoGGModule extends Module {
 		content = this.registerSetting(new TextFieldSetting("Message", "gg", "Enter message..."));
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onChat(final ReceiveChatEvent event) {
 		String msg = event.getMessage();
 		String stripped = TextUtil.stripColorCodes(msg);
@@ -58,7 +58,7 @@ public class AutoGGModule extends Module {
 		}
 	}
 
-	@EventHandler
+	@Subscribe
 	public void onTick(GameTickEvent event) {
 		if (event.getPhase() != EventPhase.POST)
 			return;

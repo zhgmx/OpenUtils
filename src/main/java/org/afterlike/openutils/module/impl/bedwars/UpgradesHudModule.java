@@ -3,7 +3,6 @@ package org.afterlike.openutils.module.impl.bedwars;
 import java.util.ArrayList;
 import java.util.List;
 import org.afterlike.openutils.event.api.EventPhase;
-import org.afterlike.openutils.event.handler.EventHandler;
 import org.afterlike.openutils.event.impl.GameTickEvent;
 import org.afterlike.openutils.event.impl.ReceiveChatEvent;
 import org.afterlike.openutils.event.impl.RenderOverlayEvent;
@@ -17,6 +16,7 @@ import org.afterlike.openutils.module.api.setting.impl.DescriptionSetting;
 import org.afterlike.openutils.util.client.ClientUtil;
 import org.afterlike.openutils.util.client.TextUtil;
 import org.afterlike.openutils.util.game.GameModeUtil;
+import re.tsuku.fastbus.Subscribe;
 
 public class UpgradesHudModule extends Module implements HudModule {
 	private final Position position = new Position(5, 100);
@@ -40,7 +40,7 @@ public class UpgradesHudModule extends Module implements HudModule {
 		showProt = this.registerSetting(new BooleanSetting("Show protection", true));
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onChatReceived(final ReceiveChatEvent event) {
 		if (!ClientUtil.notNull())
 			return;
@@ -73,7 +73,7 @@ public class UpgradesHudModule extends Module implements HudModule {
 		}
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onRender(final RenderOverlayEvent event) {
 		if (!ClientUtil.notNull())
 			return;
@@ -90,7 +90,7 @@ public class UpgradesHudModule extends Module implements HudModule {
 		}
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onTick(final GameTickEvent event) {
 		if (event.getPhase() != EventPhase.POST)
 			return;

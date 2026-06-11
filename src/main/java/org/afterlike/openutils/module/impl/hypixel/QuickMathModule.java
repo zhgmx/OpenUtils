@@ -1,7 +1,6 @@
 package org.afterlike.openutils.module.impl.hypixel;
 
 import org.afterlike.openutils.event.api.EventPhase;
-import org.afterlike.openutils.event.handler.EventHandler;
 import org.afterlike.openutils.event.impl.GameTickEvent;
 import org.afterlike.openutils.event.impl.ReceiveChatEvent;
 import org.afterlike.openutils.module.api.Module;
@@ -10,6 +9,7 @@ import org.afterlike.openutils.module.api.setting.impl.NumberSetting;
 import org.afterlike.openutils.util.client.ClientUtil;
 import org.afterlike.openutils.util.client.TextUtil;
 import org.afterlike.openutils.util.game.GameModeUtil;
+import re.tsuku.fastbus.Subscribe;
 
 public class QuickMathModule extends Module {
 	private final NumberSetting delay;
@@ -20,7 +20,7 @@ public class QuickMathModule extends Module {
 		delay = this.registerSetting(new NumberSetting("Delay (ms)", 1500, 0, 5000, 100));
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onChatReceived(final ReceiveChatEvent event) {
 		if (!ClientUtil.notNull())
 			return;
@@ -34,7 +34,7 @@ public class QuickMathModule extends Module {
 		sendTime = System.currentTimeMillis() + delay.getValue().longValue();
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onTick(final GameTickEvent event) {
 		if (event.getPhase() != EventPhase.POST)
 			return;

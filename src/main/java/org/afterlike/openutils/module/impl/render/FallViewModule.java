@@ -9,7 +9,6 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.chunk.Chunk;
-import org.afterlike.openutils.event.handler.EventHandler;
 import org.afterlike.openutils.event.impl.GameTickEvent;
 import org.afterlike.openutils.event.impl.RenderOverlayEvent;
 import org.afterlike.openutils.module.api.Module;
@@ -22,6 +21,7 @@ import org.afterlike.openutils.module.api.setting.impl.BooleanSetting;
 import org.afterlike.openutils.module.api.setting.impl.DescriptionSetting;
 import org.afterlike.openutils.module.api.setting.impl.NumberSetting;
 import org.afterlike.openutils.util.client.ClientUtil;
+import re.tsuku.fastbus.Subscribe;
 
 public class FallViewModule extends Module implements HudModule {
 	private static final int WHITE_ARGB = 0xFFFFFFFF;
@@ -97,7 +97,7 @@ public class FallViewModule extends Module implements HudModule {
 		return !onlyWhileSneaking.getValue() || mc.thePlayer.isSneaking();
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onTick(final GameTickEvent event) {
 		if (!canRunLogic())
 			return;
@@ -108,7 +108,7 @@ public class FallViewModule extends Module implements HudModule {
 		lastComputedTick = tick;
 	}
 
-	@EventHandler
+	@Subscribe
 	private void onRender(final RenderOverlayEvent event) {
 		if (!canRunLogic())
 			return;
