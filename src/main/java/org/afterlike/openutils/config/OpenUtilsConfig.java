@@ -38,22 +38,19 @@ import re.tsuku.confikure.annotations.Group;
 
 @Config(name = "OpenUtils", id = "openutils", description = "Mod settings", version = 1)
 public final class OpenUtilsConfig {
-	@Category(name = "Movement", description = "Movement quality-of-life features.", order = 0)
+	@Category(name = "Movement", order = 0)
 	public final Movement movement;
-	@Category(name = "Player", description = "Player input, combat, and interaction fixes.",
-			order = 1)
+	@Category(name = "Player", order = 1)
 	public final Player player;
-	@Category(name = "Render", description = "Camera, HUD, and visual rendering features.",
-			order = 2)
+	@Category(name = "Render", order = 2)
 	public final Render render;
-	@Category(name = "World", description = "World presentation controls.", order = 3)
+	@Category(name = "World", order = 3)
 	public final World world;
-	@Category(name = "Hypixel", description = "Hypixel chat and game helpers.", order = 4)
+	@Category(name = "Hypixel", order = 4)
 	public final Hypixel hypixel;
-	@Category(name = "Bed Wars", id = "bedwars", description = "Bed Wars alerts and HUDs.",
-			order = 5)
+	@Category(name = "Bed Wars", id = "bedwars", order = 5)
 	public final BedWars bedWars;
-	@Category(name = "Client", description = "Client controls and diagnostics.", order = 6)
+	@Category(name = "Client", order = 6)
 	public final Client client;
 	public OpenUtilsConfig(final FeatureHandler features) {
 		this.movement = new Movement(features);
