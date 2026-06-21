@@ -34,7 +34,6 @@ public class FeatureHandler {
 		this.register(new AnimationsFeature());
 		this.register(new AntiDebuffFeature());
 		this.register(new AntiShuffleFeature());
-		this.register(new ArrayListFeature());
 		this.register(new CameraFeature());
 		this.register(new CapeFeature());
 		this.register(new DamageTagsFeature());
@@ -44,7 +43,6 @@ public class FeatureHandler {
 		this.register(new ThickRodsFeature());
 		// world
 		this.register(new TimeChangerFeature());
-		this.register(new WeatherFeature());
 		// hypixel
 		this.register(new AutoGGFeature());
 		this.register(new DenickerFeature());

@@ -139,8 +139,11 @@ public class TimersHudFeature extends ToggleableFeature implements HudFeature {
 	}
 
 	@Override
-	public String getHudPlaceholderText() {
-		return "Game Time:-Emeralds:-Diamonds:";
+	public String[] getHudPreviewLines() {
+		return showElapsedTime
+				? new String[]{"§eGame Time: §f12:34", "§aEmeralds (§72§a): §f38",
+						"§bDiamonds (§73§b): §f22"}
+				: new String[]{"§aEmeralds (§72§a): §f38", "§bDiamonds (§73§b): §f22"};
 	}
 
 	@Override

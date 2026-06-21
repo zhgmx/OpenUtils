@@ -194,8 +194,59 @@ public class TargetHudFeature extends ToggleableFeature implements HudFeature {
 	}
 
 	@Override
-	public String getHudPlaceholderText() {
-		return "Target HUD";
+	public String[] getHudPreviewLines() {
+		return new String[]{"§cEnemy", "§c7.5❤"};
+	}
+
+	@Override
+	public int getHudPreviewWidth() {
+		return showHead ? 112 : 86;
+	}
+
+	@Override
+	public int getHudPreviewHeight() {
+		return 27;
+	}
+
+	@Override
+	public void renderHudPreview(final int x, final int y) {
+		final int width = getHudPreviewWidth();
+		final int height = getHudPreviewHeight();
+		final float headOffset = showHead ? 25.0f : 0.0f;
+		final int healthBarColor = RenderUtil.getHealthColor(0.75f);
+		final int healthBarBgColor = RenderUtil.darkenColor(healthBarColor, 0.2f);
+		final int indicatorColor = RenderUtil.getHealthColor(0.8f);
+		final int indicatorDarkColor = RenderUtil.darkenColor(indicatorColor, 0.8f);
+		final boolean shadow = useHudDropShadow();
+		RenderUtil.drawRect(x, y, x + width, y + height, backgroundAlpha << 24);
+		if (showOutline) {
+			RenderUtil.drawRect(x - 1, y - 1, x + width + 1, y, healthBarColor);
+			RenderUtil.drawRect(x - 1, y + height, x + width + 1, y + height + 1, healthBarColor);
+			RenderUtil.drawRect(x - 1, y, x, y + height, healthBarColor);
+			RenderUtil.drawRect(x + width, y, x + width + 1, y + height, healthBarColor);
+		}
+		if (showHead) {
+			RenderUtil.drawRect(x + 2, y + 2, x + 25, y + 25, 0xFF3A2A1F);
+			RenderUtil.drawRect(x + 6, y + 7, x + 10, y + 11, 0xFFFFFFFF);
+			RenderUtil.drawRect(x + 17, y + 7, x + 21, y + 11, 0xFFFFFFFF);
+			RenderUtil.drawRect(x + 9, y + 18, x + 18, y + 20, 0xFFB06D4E);
+		}
+		final float textX = x + headOffset + 2;
+		mc.fontRendererObj.drawString("§cEnemy", textX, y + 2, 0xFFFFFFFF, shadow);
+		mc.fontRendererObj.drawString("§c7.5❤", textX, y + 12, 0xFFFFFFFF, shadow);
+		final float barLeft = x + headOffset + 2;
+		final float barRight = x + width - 2;
+		final float barWidth = barRight - barLeft;
+		RenderUtil.drawRect(barLeft, y + 22, barRight, y + 25, healthBarBgColor);
+		RenderUtil.drawRect(barLeft, y + 22, barLeft + barWidth * 0.75f, y + 25, healthBarColor);
+		if (showIndicator) {
+			mc.fontRendererObj.drawString("§a§lW",
+					x + width - 2 - mc.fontRendererObj.getStringWidth("§a§lW"), y + 2,
+					indicatorColor, shadow);
+			mc.fontRendererObj.drawString("+2.5",
+					x + width - 2 - mc.fontRendererObj.getStringWidth("+2.5"), y + 12,
+					indicatorDarkColor, shadow);
+		}
 	}
 
 	@Override

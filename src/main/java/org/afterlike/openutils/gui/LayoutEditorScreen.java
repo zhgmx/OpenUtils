@@ -204,18 +204,7 @@ public final class LayoutEditorScreen extends GuiScreen {
 			final boolean selected = feature == this.selectedFeature;
 			GuiPrimitives.frame(this.renderer, theme, bounds.x, bounds.y, bounds.width,
 					bounds.height, hovered, selected, true);
-			drawPlaceholder(feature, bounds.x + 4, bounds.y + 4,
-					selected ? theme.text : theme.mutedText);
-		}
-	}
-
-	private void drawPlaceholder(final HudFeature feature, final int x, final int y,
-			final int color) {
-		int currentY = y;
-		for (final String line : placeholderLines(feature)) {
-			this.mc.fontRendererObj.drawString(line, x, currentY, color,
-					feature.useHudDropShadow());
-			currentY += this.mc.fontRendererObj.FONT_HEIGHT + 2;
+			feature.renderHudPreview(bounds.x + 4, bounds.y + 4);
 		}
 	}
 
@@ -257,20 +246,10 @@ public final class LayoutEditorScreen extends GuiScreen {
 	}
 
 	private GuiBounds hudBounds(final HudFeature feature) {
-		final String[] lines = placeholderLines(feature);
-		int width = 34;
-		for (final String line : lines) {
-			width = Math.max(width, this.mc.fontRendererObj.getStringWidth(line));
-		}
-		final int height = lines.length * this.mc.fontRendererObj.FONT_HEIGHT
-				+ Math.max(0, lines.length - 1) * 2;
 		final Position position = feature.getHudPosition();
-		return new GuiBounds(position.getX() - 4, position.getY() - 4, width + 8,
-				Math.max(this.mc.fontRendererObj.FONT_HEIGHT, height) + 8);
-	}
-
-	private String[] placeholderLines(final HudFeature feature) {
-		return feature.getHudPlaceholderText().split("-|\\n");
+		return new GuiBounds(position.getX() - 4, position.getY() - 4,
+				feature.getHudPreviewWidth() + 8,
+				Math.max(this.mc.fontRendererObj.FONT_HEIGHT, feature.getHudPreviewHeight()) + 8);
 	}
 
 	private void resetSelected() {

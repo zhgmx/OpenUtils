@@ -153,8 +153,10 @@ public class FinalKillsHudFeature extends ToggleableFeature implements HudFeatur
 	}
 
 	@Override
-	public String getHudPlaceholderText() {
-		return "Player:-Player:-Player:";
+	public String[] getHudPreviewLines() {
+		return showVoidKills
+				? new String[]{"§aSteve: §f2", "§bAlex: §f1", VOID_KEY + ": §f1"}
+				: new String[]{"§aSteve: §f2", "§bAlex: §f1"};
 	}
 
 	@Override

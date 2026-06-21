@@ -24,7 +24,6 @@ import org.afterlike.openutils.feature.impl.player.NoHitDelayFeature;
 import org.afterlike.openutils.feature.impl.render.AnimationsFeature;
 import org.afterlike.openutils.feature.impl.render.AntiDebuffFeature;
 import org.afterlike.openutils.feature.impl.render.AntiShuffleFeature;
-import org.afterlike.openutils.feature.impl.render.ArrayListFeature;
 import org.afterlike.openutils.feature.impl.render.CameraFeature;
 import org.afterlike.openutils.feature.impl.render.CapeFeature;
 import org.afterlike.openutils.feature.impl.render.DamageTagsFeature;
@@ -33,7 +32,6 @@ import org.afterlike.openutils.feature.impl.render.NameHiderFeature;
 import org.afterlike.openutils.feature.impl.render.TargetHudFeature;
 import org.afterlike.openutils.feature.impl.render.ThickRodsFeature;
 import org.afterlike.openutils.feature.impl.world.TimeChangerFeature;
-import org.afterlike.openutils.feature.impl.world.WeatherFeature;
 import re.tsuku.confikure.annotations.Category;
 import re.tsuku.confikure.annotations.Config;
 import re.tsuku.confikure.annotations.Group;
@@ -108,33 +106,29 @@ public final class OpenUtilsConfig {
 		@Group(name = "Anti Shuffle",
 				description = "Removes obfuscated text formatting while rendering.", order = 2)
 		public final AntiShuffleFeature antiShuffle;
-		@Group(name = "Array List", description = "HUD list of currently enabled features.",
-				order = 3)
-		public final ArrayListFeature arrayList;
 		@Group(name = "Camera", description = "Adjust third-person distance and hurt-camera shake.",
-				order = 4)
+				order = 3)
 		public final CameraFeature camera;
-		@Group(name = "Cape", description = "Renders the selected cape texture.", order = 5)
+		@Group(name = "Cape", description = "Renders the selected cape texture.", order = 4)
 		public final CapeFeature cape;
 		@Group(name = "Damage Tags", description = "Floating world-space health change tags.",
-				order = 6)
+				order = 5)
 		public final DamageTagsFeature damageTags;
 		@Group(name = "Free Look", description = "Hold-to-look camera controls for third person.",
-				order = 7)
+				order = 6)
 		public final FreeLookFeature freeLook;
 		@Group(name = "Name Hider",
-				description = "Replaces your visible username in rendered text.", order = 8)
+				description = "Replaces your visible username in rendered text.", order = 7)
 		public final NameHiderFeature nameHider;
-		@Group(name = "Target HUD", description = "Compact combat target health HUD.", order = 9)
+		@Group(name = "Target HUD", description = "Compact combat target health HUD.", order = 8)
 		public final TargetHudFeature targetHud;
 		@Group(name = "Thick Rods", description = "Draws cast fishing lines with extra width.",
-				order = 10)
+				order = 9)
 		public final ThickRodsFeature thickRods;
 		private Render(final FeatureHandler features) {
 			this.animations = features.getFeature(AnimationsFeature.class);
 			this.antiDebuff = features.getFeature(AntiDebuffFeature.class);
 			this.antiShuffle = features.getFeature(AntiShuffleFeature.class);
-			this.arrayList = features.getFeature(ArrayListFeature.class);
 			this.camera = features.getFeature(CameraFeature.class);
 			this.cape = features.getFeature(CapeFeature.class);
 			this.damageTags = features.getFeature(DamageTagsFeature.class);
@@ -147,12 +141,8 @@ public final class OpenUtilsConfig {
 	public static final class World {
 		@Group(name = "Time Changer", description = "Changes the displayed world time.", order = 0)
 		public final TimeChangerFeature timeChanger;
-		@Group(name = "Weather TODO", description = "TODO: weather controls are not implemented.",
-				order = 1)
-		public final WeatherFeature weather;
 		private World(final FeatureHandler features) {
 			this.timeChanger = features.getFeature(TimeChangerFeature.class);
-			this.weather = features.getFeature(WeatherFeature.class);
 		}
 	}
 	public static final class Hypixel {

@@ -145,8 +145,18 @@ public class UpgradesHudFeature extends ToggleableFeature implements HudFeature 
 	}
 
 	@Override
-	public String getHudPlaceholderText() {
-		return "Trap:-Sharp:-Prot:";
+	public String[] getHudPreviewLines() {
+		final List<String> lines = new ArrayList<>();
+		if (showTrap) {
+			lines.add("Trap: §aMiner Fatigue");
+		}
+		if (showSharp) {
+			lines.add("Sharp: §aI");
+		}
+		if (showProt) {
+			lines.add("Prot: §aII");
+		}
+		return lines.toArray(new String[0]);
 	}
 
 	@Override
