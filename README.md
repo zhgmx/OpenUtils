@@ -10,6 +10,19 @@
 `OpenUtils` is an open-source Minecraft 1.8.9 Forge utility mod for client-side gameplay, HUD and Hypixel features.
 It is built for players who want practical quality-of-life tools that stay available, readable, and easy to fork.
 
+<table align="center">
+  <tr>
+    <td align="center">
+      <img src=".github/assets/config.png" alt="OpenUtils settings screen" width="420"><br>
+      <sub>Settings</sub>
+    </td>
+    <td align="center">
+      <img src=".github/assets/layout.png" alt="OpenUtils layout editor" width="420"><br>
+      <sub>Layout Editor</sub>
+    </td>
+  </tr>
+</table>
+
 ## Features
 
 <details>
