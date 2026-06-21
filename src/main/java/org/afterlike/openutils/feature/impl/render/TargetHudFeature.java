@@ -9,6 +9,7 @@ import org.afterlike.openutils.event.impl.RenderOverlayEvent;
 import org.afterlike.openutils.event.impl.WorldLoadEvent;
 import org.afterlike.openutils.feature.api.FeatureCategory;
 import org.afterlike.openutils.feature.api.ToggleableFeature;
+import org.afterlike.openutils.feature.api.hud.Anchor;
 import org.afterlike.openutils.feature.api.hud.HudFeature;
 import org.afterlike.openutils.feature.api.hud.Position;
 import org.afterlike.openutils.util.client.ClientUtil;
@@ -23,7 +24,7 @@ public class TargetHudFeature extends ToggleableFeature implements HudFeature {
 	private static final DecimalFormat DIFF_FORMAT = new DecimalFormat("+0.0;-0.0",
 			new DecimalFormatSymbols(Locale.US));
 	private static final long ANIM_DURATION_MS = 150L;
-	private final Position position = new Position(400, 300);
+	private final Position position = new Position(80, 20, Anchor.CENTER);
 	@Option(name = "Enable Target HUD",
 			description = "Show target health and hit status after attacking a player.", order = 0)
 	public boolean enabled;
