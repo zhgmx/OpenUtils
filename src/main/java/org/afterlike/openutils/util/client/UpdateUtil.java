@@ -10,10 +10,13 @@ import org.afterlike.openutils.OpenUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class UpdateUtil {
+public final class UpdateUtil {
 	private static final Logger logger = LogManager.getLogger(UpdateUtil.class);
 	private static final String API_URL = "https://api.github.com/repos/polariscli/OpenUtils/releases/latest";
 	private static volatile String latest = null;
+	private UpdateUtil() {
+	}
+
 	public static void checkAsync() {
 		CompletableFuture.runAsync(UpdateUtil::check);
 	}

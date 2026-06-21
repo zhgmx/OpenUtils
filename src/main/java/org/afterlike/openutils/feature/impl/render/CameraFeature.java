@@ -19,7 +19,7 @@ public class CameraFeature extends ToggleableFeature {
 	@Range(min = 1.0D, max = 40.0D, step = 1.0D)
 	public float distance = 4.0F;
 	@Option(name = "Hurt shake multiplier",
-			description = "Scales hurt-camera shake. Vanilla is 14; use 0 to remove it.", order = 2)
+			description = "Scales hurt-camera shake. Vanilla is 14.", order = 2)
 	@Range(min = -40.0D, max = 40.0D, step = 1.0D)
 	public float shakeMultiplier = 14.0F;
 	public CameraFeature() {

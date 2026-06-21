@@ -10,10 +10,13 @@ import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
 import org.afterlike.openutils.util.client.TextUtil;
 
-public class WorldUtil {
+public final class WorldUtil {
 	private static final Minecraft mc = Minecraft.getMinecraft();
 	private static List<String> cachedScoreboard = Collections.emptyList();
 	private static int lastTick = -1;
+	private WorldUtil() {
+	}
+
 	public static List<String> getScoreboard() {
 		if (mc.theWorld == null) {
 			cachedScoreboard = Collections.emptyList();

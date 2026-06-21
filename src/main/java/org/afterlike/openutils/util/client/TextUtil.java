@@ -2,8 +2,11 @@ package org.afterlike.openutils.util.client;
 
 import net.minecraft.client.Minecraft;
 
-public class TextUtil {
+public final class TextUtil {
 	private static final Minecraft mc = Minecraft.getMinecraft();
+	private TextUtil() {
+	}
+
 	public static String replaceColorCodes(final String message) {
 		return message.replaceAll("&", "§");
 	}

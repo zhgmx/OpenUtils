@@ -13,17 +13,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import re.tsuku.fastbus.FastBus;
 
-public class OpenUtils {
-	private static final Logger logger = LogManager.getLogger(OpenUtils.class);
-	private static final OpenUtils instance = new OpenUtils();
+public final class OpenUtils {
+	private static final Logger LOGGER = LogManager.getLogger(OpenUtils.class);
+	private static final OpenUtils INSTANCE = new OpenUtils();
 	private static final String VERSION = org.afterlike.openutils.BuildConstants.VERSION;
-	// check for updates
 	private static volatile boolean outdated = false;
 	private static volatile boolean notified = false;
 	private final FeatureHandler featureHandler;
 	private final ConfigHandler configHandler;
 	private final FastBus eventBus;
-	public OpenUtils() {
+	private OpenUtils() {
 		this.featureHandler = new FeatureHandler();
 		this.configHandler = new ConfigHandler();
 		this.eventBus = new FastBus();
@@ -33,7 +32,7 @@ public class OpenUtils {
 		final long startTime = System.nanoTime();
 		featureHandler.initialize();
 		configHandler.loadAndApply();
-		logger.info("Initialized in {}ms.", (System.nanoTime() - startTime) / 1_000_000);
+		LOGGER.info("Initialized in {}ms.", (System.nanoTime() - startTime) / 1_000_000);
 	}
 
 	public void lateInitialize() {
@@ -83,6 +82,6 @@ public class OpenUtils {
 	}
 
 	public static OpenUtils get() {
-		return Objects.requireNonNull(instance);
+		return Objects.requireNonNull(INSTANCE);
 	}
 }

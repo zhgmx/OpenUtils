@@ -5,9 +5,12 @@ import net.minecraft.util.ChatComponentText;
 import org.afterlike.openutils.OpenUtils;
 import org.afterlike.openutils.feature.impl.client.DebugFeature;
 
-public class ClientUtil {
+public final class ClientUtil {
 	private static final Minecraft mc = Minecraft.getMinecraft();
 	private static final String prefix = "§8§l» §r";
+	private ClientUtil() {
+	}
+
 	public static void sendMessage(final String message) {
 		if (notNull()) {
 			mc.thePlayer.addChatMessage(

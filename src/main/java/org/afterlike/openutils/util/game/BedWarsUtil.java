@@ -3,6 +3,8 @@ package org.afterlike.openutils.util.game;
 import net.minecraft.entity.player.EntityPlayer;
 
 public final class BedWarsUtil {
+	private BedWarsUtil() {
+	}
 	public enum TeamColor {
 		RED("Red", "§c"), BLUE("Blue", "§9"), GREEN("Green", "§a"), YELLOW("Yellow", "§e"), AQUA(
 				"Aqua", "§b"), WHITE("White", "§f"), PINK("Pink", "§d"), GRAY("Gray", "§8");

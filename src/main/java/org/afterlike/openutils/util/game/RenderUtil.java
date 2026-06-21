@@ -1,6 +1,6 @@
 package org.afterlike.openutils.util.game;
 
-import java.awt.*;
+import java.awt.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.gui.FontRenderer;
@@ -11,7 +11,10 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class RenderUtil {
+public final class RenderUtil {
+	private RenderUtil() {
+	}
+
 	public static void drawChromaText(final String text, final char lineSplit, int x, int y,
 			final long speed, final long shift, final boolean shadow,
 			final FontRenderer fontRenderer) {

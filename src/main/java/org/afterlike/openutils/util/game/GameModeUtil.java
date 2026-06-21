@@ -3,7 +3,10 @@ package org.afterlike.openutils.util.game;
 import java.util.List;
 import org.afterlike.openutils.util.client.TextUtil;
 
-public class GameModeUtil {
+public final class GameModeUtil {
+	private GameModeUtil() {
+	}
+
 	public static boolean onHypixel() {
 		List<String> sb = WorldUtil.getScoreboard();
 		for (String s : sb) {
@@ -16,10 +19,6 @@ public class GameModeUtil {
 
 	public static boolean isInBedWarsGame() {
 		return getBedWarsStatusType() == BedWarsStatus.IN_GAME;
-	}
-
-	public static int getBedWarsStatus() {
-		return getBedWarsStatusType().code;
 	}
 
 	public static BedWarsStatus getBedWarsStatusType() {
@@ -47,10 +46,6 @@ public class GameModeUtil {
 		return BedWarsStatus.NOT_BEDWARS;
 	}
 	public enum BedWarsStatus {
-		NOT_BEDWARS(0), LOBBY(1), PREGAME(2), IN_GAME(3);
-		private final int code;
-		BedWarsStatus(final int code) {
-			this.code = code;
-		}
+		NOT_BEDWARS, LOBBY, PREGAME, IN_GAME
 	}
 }

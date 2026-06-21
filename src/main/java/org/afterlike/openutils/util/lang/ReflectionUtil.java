@@ -2,7 +2,10 @@ package org.afterlike.openutils.util.lang;
 
 import java.lang.reflect.Field;
 
-public class ReflectionUtil {
+public final class ReflectionUtil {
+	private ReflectionUtil() {
+	}
+
 	@SafeVarargs
 	public static <Return, Owner> Return getField(final Owner object, final String fieldName,
 			final Owner... mock) {
