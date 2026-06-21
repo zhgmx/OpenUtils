@@ -23,8 +23,7 @@ public class NullMoveFeature extends ToggleableFeature {
 	@Option(name = "Enable Snap Tap",
 			description = "Resolves simultaneous opposite movement inputs per axis.", order = 0)
 	public boolean enabled;
-	@Option(name = "Forward / Back SOCD",
-			description = "Choose how forward and backward are resolved when both are held.",
+	@Option(name = "Forward / Back SOCD", description = "Resolve forward/back when both are held.",
 			order = 1)
 	@Mode(values = {LAST_INPUT_PRIORITY, ABSOLUTE_PRIORITY, NEUTRAL})
 	public String forwardBackMode = LAST_INPUT_PRIORITY;
@@ -32,8 +31,7 @@ public class NullMoveFeature extends ToggleableFeature {
 			description = "Direction kept when forward and backward are both held.", order = 2)
 	@Mode(values = {FORWARD, BACKWARD})
 	public String forwardBackPriority = FORWARD;
-	@Option(name = "Side SOCD",
-			description = "Choose how left and right are resolved when both are held.", order = 3)
+	@Option(name = "Side SOCD", description = "Resolve left/right when both are held.", order = 3)
 	@Mode(values = {LAST_INPUT_PRIORITY, ABSOLUTE_PRIORITY, NEUTRAL})
 	public String sideMode = LAST_INPUT_PRIORITY;
 	@Option(id = "side-priority", name = "Absolute Priority",
