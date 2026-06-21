@@ -7,7 +7,6 @@
     "minecraft.client.entity.AbstractClientPlayerMixin",
     "minecraft.entity.EntityLivingBaseAccessor",
     "minecraft.entity.EntityLivingBaseMixin",
-    "minecraft.item.ItemBucketMixin",
     "minecraft.network.NetworkManagerMixin",
     "minecraft.world.storage.WorldInfoMixin",
     "minecraftforge.fml.common.network.handshake.ModListMixin"

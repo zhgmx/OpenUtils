@@ -10,7 +10,7 @@ import net.minecraft.util.EnumChatFormatting;
 import org.afterlike.openutils.OpenUtils;
 import org.afterlike.openutils.event.api.EventPhase;
 import org.afterlike.openutils.event.impl.*;
-import org.afterlike.openutils.module.impl.render.FreeLookModule;
+import org.afterlike.openutils.feature.impl.render.FreeLookFeature;
 import org.afterlike.openutils.util.client.ClientUtil;
 import org.afterlike.openutils.util.client.UpdateUtil;
 import org.lwjgl.input.Keyboard;
@@ -106,8 +106,8 @@ public abstract class MinecraftMixin {
 					target = "Lnet/minecraft/client/settings/GameSettings;thirdPersonView:I",
 					opcode = Opcodes.PUTFIELD))
 	private void ou$runTick$thirdPersonView(final GameSettings instance, final int value) {
-		if (OpenUtils.get().getModuleHandler().isEnabled(FreeLookModule.class)) {
-			OpenUtils.get().getModuleHandler().getModuleClass(FreeLookModule.class).reset();
+		if (OpenUtils.get().getFeatureHandler().isEnabled(FreeLookFeature.class)) {
+			OpenUtils.get().getFeatureHandler().getFeature(FreeLookFeature.class).reset();
 		} else {
 			instance.thirdPersonView = value;
 		}

@@ -107,6 +107,7 @@ dependencies {
 
     shade("com.google.code.gson:gson:2.13.2")
     shade("re.tsuku:fastbus:1.1.1")
+    shade("re.tsuku:confikure:1.1.1")
     shade("org.spongepowered:mixin:0.7.11-SNAPSHOT") {
         isTransitive = false
     }
@@ -160,6 +161,7 @@ tasks {
 
         relocateInside("com.google.gson")
         relocateInside("re.tsuku.fastbus")
+        relocateInside("re.tsuku.confikure")
     }
 
     assemble.get().dependsOn(remapJar)

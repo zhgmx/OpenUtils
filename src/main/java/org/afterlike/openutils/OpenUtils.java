@@ -6,8 +6,7 @@ import java.util.Objects;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.afterlike.openutils.config.handler.ConfigHandler;
-import org.afterlike.openutils.gui.ClickGuiScreen;
-import org.afterlike.openutils.module.handler.ModuleHandler;
+import org.afterlike.openutils.feature.handler.FeatureHandler;
 import org.afterlike.openutils.util.client.UpdateUtil;
 import org.afterlike.openutils.util.lang.ReflectionUtil;
 import org.apache.logging.log4j.LogManager;
@@ -21,19 +20,18 @@ public class OpenUtils {
 	// check for updates
 	private static volatile boolean outdated = false;
 	private static volatile boolean notified = false;
-	private final ModuleHandler moduleHandler;
+	private final FeatureHandler featureHandler;
 	private final ConfigHandler configHandler;
 	private final FastBus eventBus;
-	private ClickGuiScreen clickGuiScreen;
 	public OpenUtils() {
-		this.moduleHandler = new ModuleHandler();
+		this.featureHandler = new FeatureHandler();
 		this.configHandler = new ConfigHandler();
 		this.eventBus = new FastBus();
 	}
 
 	public void initialize() {
 		final long startTime = System.nanoTime();
-		moduleHandler.initialize();
+		featureHandler.initialize();
 		configHandler.loadAndApply();
 		logger.info("Initialized in {}ms.", (System.nanoTime() - startTime) / 1_000_000);
 	}
@@ -56,19 +54,12 @@ public class OpenUtils {
 		return eventBus;
 	}
 
-	public ModuleHandler getModuleHandler() {
-		return moduleHandler;
+	public FeatureHandler getFeatureHandler() {
+		return featureHandler;
 	}
 
 	public ConfigHandler getConfigHandler() {
 		return configHandler;
-	}
-
-	public ClickGuiScreen getClickGuiScreen() {
-		if (clickGuiScreen == null) {
-			clickGuiScreen = new ClickGuiScreen();
-		}
-		return clickGuiScreen;
 	}
 
 	public String getVersion() {

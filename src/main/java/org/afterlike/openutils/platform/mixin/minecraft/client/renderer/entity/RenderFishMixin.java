@@ -1,11 +1,9 @@
 package org.afterlike.openutils.platform.mixin.minecraft.client.renderer.entity;
 
-import java.util.Objects;
 import net.minecraft.client.renderer.entity.RenderFish;
 import net.minecraft.entity.projectile.EntityFishHook;
 import org.afterlike.openutils.OpenUtils;
-import org.afterlike.openutils.module.api.setting.impl.NumberSetting;
-import org.afterlike.openutils.module.impl.render.ThickRodsModule;
+import org.afterlike.openutils.feature.impl.render.ThickRodsFeature;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,11 +19,9 @@ public class RenderFishMixin {
 	private void ou$modifyLineThickness(final EntityFishHook entity, final double x, final double y,
 			final double z, final float entityYaw, final float partialTicks,
 			final CallbackInfo ci) {
-		if (!OpenUtils.get().getModuleHandler().isEnabled(ThickRodsModule.class))
+		if (!OpenUtils.get().getFeatureHandler().isEnabled(ThickRodsFeature.class))
 			return;
-		GL11.glLineWidth(1.0f + Objects.requireNonNull(
-				OpenUtils.get().getModuleHandler().getModuleClass(ThickRodsModule.class)
-						.getSetting("Line Thickness", NumberSetting.class))
-				.getFloat());
+		GL11.glLineWidth(1.0f
+				+ OpenUtils.get().getFeatureHandler().getFeature(ThickRodsFeature.class).thickness);
 	}
 }

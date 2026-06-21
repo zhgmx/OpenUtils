@@ -1,158 +1,144 @@
 package org.afterlike.openutils.config.handler;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
-import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import net.minecraft.client.Minecraft;
 import org.afterlike.openutils.OpenUtils;
-import org.afterlike.openutils.config.api.ConfigData;
-import org.afterlike.openutils.config.api.HudEntry;
-import org.afterlike.openutils.config.api.ModuleEntry;
-import org.afterlike.openutils.config.api.PanelEntry;
-import org.afterlike.openutils.gui.ClickGuiScreen;
-import org.afterlike.openutils.gui.panel.CategoryPanel;
-import org.afterlike.openutils.module.api.Module;
-import org.afterlike.openutils.module.api.hud.Anchor;
-import org.afterlike.openutils.module.api.hud.HudModule;
-import org.afterlike.openutils.module.api.hud.Position;
-import org.afterlike.openutils.module.api.setting.Setting;
+import org.afterlike.openutils.config.HudLayoutStore;
+import org.afterlike.openutils.config.OpenUtilsConfig;
+import org.afterlike.openutils.gui.OpenUtilsConfigScreen;
+import re.tsuku.confikure.Confikure;
+import re.tsuku.confikure.forge.internal.ClientTickScheduler;
+import re.tsuku.confikure.gui.ConfigGuiState;
+import re.tsuku.confikure.model.ConfigCategory;
+import re.tsuku.confikure.model.ConfigDefinition;
+import re.tsuku.confikure.model.ConfigGroup;
+import re.tsuku.confikure.model.ConfigOption;
+import re.tsuku.confikure.model.OptionListener;
+import re.tsuku.confikure.persistence.ConfigStore;
 
 public class ConfigHandler {
-	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-	private static final Type CONFIG_TYPE = new TypeToken<ConfigData>() {
-	}.getType();
-	private static ConfigData cachedPanels;
+	private final ConfigStore store = new ConfigStore();
+	private final HudLayoutStore hudLayoutStore = new HudLayoutStore();
+	private OpenUtilsConfig config;
+	private ConfigDefinition definition;
+	private ConfigGuiState guiState;
 	private boolean loading = false;
+	public void loadAndApply() {
+		final Path path = getConfigPath();
+		this.config = new OpenUtilsConfig(OpenUtils.get().getFeatureHandler());
+		this.definition = Confikure.scan(this.config);
+		this.guiState = defaultGuiState(this.definition);
+		this.loading = true;
+		try {
+			this.store.load(this.definition, path, this.guiState);
+			this.hudLayoutStore.load(OpenUtils.get().getFeatureHandler().getFeatures(),
+					getHudLayoutPath());
+		} catch (final IOException ignored) {
+		} finally {
+			this.loading = false;
+		}
+		bindOptionListeners();
+		applyConfigToFeatures();
+	}
+
+	public void saveConfiguration() {
+		if (this.loading) {
+			return;
+		}
+		try {
+			this.store.save(getDefinition(), getGuiState(), getConfigPath());
+			this.hudLayoutStore.save(OpenUtils.get().getFeatureHandler().getFeatures(),
+					getHudLayoutPath());
+		} catch (final IOException ignored) {
+		}
+	}
+
+	public OpenUtilsConfigScreen createGuiScreen() {
+		return new OpenUtilsConfigScreen(getDefinition(), getConfigPath(), this.store,
+				getGuiState());
+	}
+
+	public void openGui() {
+		Minecraft.getMinecraft().displayGuiScreen(createGuiScreen());
+	}
+
+	public void openGuiDelayed() {
+		ClientTickScheduler.schedule(new Runnable() {
+			public void run() {
+				openGui();
+			}
+		});
+	}
+
+	public boolean isLoading() {
+		return this.loading;
+	}
+
+	public ConfigDefinition getDefinition() {
+		if (this.definition == null) {
+			this.config = new OpenUtilsConfig(OpenUtils.get().getFeatureHandler());
+			this.definition = Confikure.scan(this.config);
+			bindOptionListeners();
+		}
+		return this.definition;
+	}
+
+	public ConfigGuiState getGuiState() {
+		if (this.guiState == null) {
+			this.guiState = defaultGuiState(getDefinition());
+		}
+		return this.guiState;
+	}
+
+	public static ConfigGuiState defaultGuiState(final ConfigDefinition definition) {
+		final ConfigGuiState state = new ConfigGuiState();
+		for (final ConfigCategory category : definition.categories()) {
+			for (final ConfigGroup group : category.groups()) {
+				state.collapsed(category.id(), group.id(), true);
+			}
+		}
+		return state;
+	}
+
+	private void bindOptionListeners() {
+		final ConfigDefinition current = getDefinition();
+		final OptionListener listener = new OptionListener() {
+			public void changed(final ConfigOption option, final Object oldValue,
+					final Object newValue) {
+				applyConfigToFeatures();
+				saveConfiguration();
+			}
+		};
+		for (final ConfigCategory category : current.categories()) {
+			for (final ConfigOption option : category.options()) {
+				option.addListener(listener);
+			}
+		}
+	}
+
+	private static void applyConfigToFeatures() {
+		OpenUtils.get().getFeatureHandler().applyConfiguredStates();
+		OpenUtils.get().getFeatureHandler().notifyConfigChanged();
+	}
+
 	private static Path getConfigPath() {
+		return getConfigDir().resolve("config.json");
+	}
+
+	private static Path getHudLayoutPath() {
+		return getConfigDir().resolve("hud-layout.json");
+	}
+
+	private static Path getConfigDir() {
 		final Minecraft mc = Minecraft.getMinecraft();
 		final Path dir = Paths.get(mc.mcDataDir.getAbsolutePath(), "config", "openutils");
 		try {
 			Files.createDirectories(dir);
 		} catch (final IOException ignored) {
 		}
-		return dir.resolve("config.json");
-	}
-
-	public void loadAndApply() {
-		final Path path = getConfigPath();
-		if (!Files.exists(path)) {
-			return;
-		}
-		loading = true;
-		try (final Reader reader = Files.newBufferedReader(path)) {
-			final ConfigData data = GSON.fromJson(reader, CONFIG_TYPE);
-			if (data == null)
-				return;
-			cachedPanels = data;
-			applyModules(data);
-		} catch (final IOException ignored) {
-		} finally {
-			loading = false;
-		}
-	}
-
-	private void applyModules(final ConfigData data) {
-		for (final Module module : OpenUtils.get().getModuleHandler().getModules()) {
-			final ModuleEntry entry = data.modules.get(module.getName());
-			if (entry == null)
-				continue;
-			if (entry.enabled && !module.isEnabled()) {
-				module.setEnabled(true);
-			} else if (!entry.enabled && module.isEnabled()) {
-				module.setEnabled(false);
-			}
-			final Map<String, Object> settings = entry.settings;
-			if (settings == null)
-				continue;
-			for (final Setting<?> setting : module.getSettings()) {
-				final Object value = settings.get(setting.getName());
-				if (value == null)
-					continue;
-				setting.deserializeValue(value);
-			}
-			if (module instanceof HudModule && entry.hud != null) {
-				final Position position = ((HudModule) module).getHudPosition();
-				if (entry.hud.anchor != null) {
-					try {
-						position.setAnchor(Anchor.valueOf(entry.hud.anchor));
-					} catch (final IllegalArgumentException ignored) {
-					}
-				}
-				position.setPosition(entry.hud.x, entry.hud.y);
-			}
-		}
-	}
-
-	public void applyPanels(final List<CategoryPanel> panels) {
-		if (cachedPanels == null)
-			return;
-		final Map<String, PanelEntry> panelMap = cachedPanels.panels;
-		for (final CategoryPanel panel : panels) {
-			final PanelEntry entry = panelMap.get(panel.getCategory().name());
-			if (entry == null)
-				continue;
-			panel.setX(entry.x);
-			panel.setY(entry.y);
-			panel.setExpanded(entry.expanded);
-			panel.layoutComponents();
-		}
-	}
-
-	public void saveConfiguration() {
-		if (loading) {
-			return;
-		}
-		final ConfigData data = new ConfigData();
-		data.modules = new HashMap<>();
-		for (final Module module : OpenUtils.get().getModuleHandler().getModules()) {
-			final ModuleEntry entry = new ModuleEntry();
-			entry.enabled = module.isEnabled();
-			entry.settings = new HashMap<>();
-			for (final Setting<?> setting : module.getSettings()) {
-				final Object serialized = setting.serializeValue();
-				if (serialized != null) {
-					entry.settings.put(setting.getName(), serialized);
-				}
-			}
-			if (module instanceof HudModule) {
-				final Position position = ((HudModule) module).getHudPosition();
-				final HudEntry hudEntry = new HudEntry();
-				hudEntry.x = position.getOffsetX();
-				hudEntry.y = position.getOffsetY();
-				hudEntry.anchor = position.getAnchor().name();
-				entry.hud = hudEntry;
-			}
-			data.modules.put(module.getName(), entry);
-		}
-		if (cachedPanels != null) {
-			data.panels = new HashMap<>(cachedPanels.panels);
-		} else {
-			data.panels = new HashMap<>();
-		}
-		if (ClickGuiScreen.categoryPanels != null) {
-			for (final CategoryPanel panel : ClickGuiScreen.categoryPanels) {
-				final PanelEntry entry = new PanelEntry();
-				entry.x = panel.getX();
-				entry.y = panel.getY();
-				entry.expanded = panel.isExpanded();
-				data.panels.put(panel.getCategory().name(), entry);
-			}
-		}
-		final Path path = getConfigPath();
-		try (final Writer writer = Files.newBufferedWriter(path)) {
-			GSON.toJson(data, writer);
-			cachedPanels = data;
-		} catch (final IOException ignored) {
-		}
+		return dir;
 	}
 }

@@ -1,14 +1,12 @@
 package org.afterlike.openutils.platform.mixin.minecraft.client.renderer;
 
-import java.util.Objects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.entity.Entity;
 import org.afterlike.openutils.OpenUtils;
 import org.afterlike.openutils.event.impl.RenderWorldEvent;
-import org.afterlike.openutils.module.api.setting.impl.NumberSetting;
-import org.afterlike.openutils.module.impl.render.CameraModule;
-import org.afterlike.openutils.module.impl.render.FreeLookModule;
+import org.afterlike.openutils.feature.impl.render.CameraFeature;
+import org.afterlike.openutils.feature.impl.render.FreeLookFeature;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,12 +22,9 @@ public class EntityRendererMixin {
 					target = "Lnet/minecraft/client/renderer/GlStateManager;rotate(FFFF)V"),
 			index = 0)
 	private float ou$modifyHurtCameraEffect(float angle) {
-		if (OpenUtils.get().getModuleHandler().isEnabled(CameraModule.class)) {
-			return angle / 14 * Objects
-					.requireNonNull(
-							OpenUtils.get().getModuleHandler().getModuleClass(CameraModule.class)
-									.getSetting("Hurt Shake Multiplier", NumberSetting.class))
-					.getFloat();
+		if (OpenUtils.get().getFeatureHandler().isEnabled(CameraFeature.class)) {
+			return angle / 14 * OpenUtils.get().getFeatureHandler()
+					.getFeature(CameraFeature.class).shakeMultiplier;
 		}
 		return angle;
 	}
@@ -37,48 +32,48 @@ public class EntityRendererMixin {
 	@Redirect(method = "orientCamera", at = @At(value = "FIELD",
 			target = "Lnet/minecraft/entity/Entity;rotationYaw:F", opcode = Opcodes.GETFIELD))
 	private float ou$orientCamera$rotationYaw(final Entity instance) {
-		final FreeLookModule freeLookModule = OpenUtils.get().getModuleHandler()
-				.getModuleClass(FreeLookModule.class);
-		return freeLookModule.isEnabled() ? freeLookModule.getCameraYaw() : instance.rotationYaw;
+		final FreeLookFeature freeLookFeature = OpenUtils.get().getFeatureHandler()
+				.getFeature(FreeLookFeature.class);
+		return freeLookFeature.isEnabled() ? freeLookFeature.getCameraYaw() : instance.rotationYaw;
 	}
 
 	@Redirect(method = "orientCamera", at = @At(value = "FIELD",
 			target = "Lnet/minecraft/entity/Entity;prevRotationYaw:F", opcode = Opcodes.GETFIELD))
 	private float ou$orientCamera$prevRotationYaw(final Entity instance) {
-		final FreeLookModule freeLookModule = OpenUtils.get().getModuleHandler()
-				.getModuleClass(FreeLookModule.class);
-		return freeLookModule.isEnabled()
-				? freeLookModule.getCameraYaw()
+		final FreeLookFeature freeLookFeature = OpenUtils.get().getFeatureHandler()
+				.getFeature(FreeLookFeature.class);
+		return freeLookFeature.isEnabled()
+				? freeLookFeature.getCameraYaw()
 				: instance.prevRotationYaw;
 	}
 
 	@Redirect(method = "orientCamera", at = @At(value = "FIELD",
 			target = "Lnet/minecraft/entity/Entity;rotationPitch:F", opcode = Opcodes.GETFIELD))
 	private float ou$orientCamera$rotationPitch(final Entity instance) {
-		final FreeLookModule freeLookModule = OpenUtils.get().getModuleHandler()
-				.getModuleClass(FreeLookModule.class);
-		return freeLookModule.isEnabled()
-				? freeLookModule.getCameraPitch()
+		final FreeLookFeature freeLookFeature = OpenUtils.get().getFeatureHandler()
+				.getFeature(FreeLookFeature.class);
+		return freeLookFeature.isEnabled()
+				? freeLookFeature.getCameraPitch()
 				: instance.rotationPitch;
 	}
 
 	@Redirect(method = "orientCamera", at = @At(value = "FIELD",
 			target = "Lnet/minecraft/entity/Entity;prevRotationPitch:F", opcode = Opcodes.GETFIELD))
 	private float ou$orientCamera$prevRotationPitch(final Entity instance) {
-		final FreeLookModule freeLookModule = OpenUtils.get().getModuleHandler()
-				.getModuleClass(FreeLookModule.class);
-		return freeLookModule.isEnabled()
-				? freeLookModule.getCameraPitch()
+		final FreeLookFeature freeLookFeature = OpenUtils.get().getFeatureHandler()
+				.getFeature(FreeLookFeature.class);
+		return freeLookFeature.isEnabled()
+				? freeLookFeature.getCameraPitch()
 				: instance.prevRotationPitch;
 	}
 
 	@Redirect(method = "updateCameraAndRender", at = @At(value = "FIELD",
 			target = "Lnet/minecraft/client/Minecraft;inGameHasFocus:Z", opcode = Opcodes.GETFIELD))
 	private boolean ou$updateCameraAndRender$overrideMouse(final Minecraft instance) {
-		final FreeLookModule freeLookModule = OpenUtils.get().getModuleHandler()
-				.getModuleClass(FreeLookModule.class);
-		if (freeLookModule.isEnabled()) {
-			return freeLookModule.overrideMouse();
+		final FreeLookFeature freeLookFeature = OpenUtils.get().getFeatureHandler()
+				.getFeature(FreeLookFeature.class);
+		if (freeLookFeature.isEnabled()) {
+			return freeLookFeature.overrideMouse();
 		}
 		return instance.inGameHasFocus;
 	}

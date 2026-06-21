@@ -1,15 +1,13 @@
 package org.afterlike.openutils.platform.mixin.minecraft.client.entity;
 
-import java.util.Objects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import org.afterlike.openutils.OpenUtils;
-import org.afterlike.openutils.module.api.setting.impl.BooleanSetting;
-import org.afterlike.openutils.module.handler.ModuleHandler;
-import org.afterlike.openutils.module.impl.render.AnimationsModule;
+import org.afterlike.openutils.feature.handler.FeatureHandler;
+import org.afterlike.openutils.feature.impl.render.AnimationsFeature;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,19 +20,16 @@ public class EntityPlayerMixin {
 		EntityPlayer self = (EntityPlayer) (Object) this;
 		if (!(self instanceof EntityPlayerSP))
 			return false;
-		ModuleHandler handler = OpenUtils.get().getModuleHandler();
-		AnimationsModule module = handler.getModuleClass(AnimationsModule.class);
-		if (!handler.isEnabled(AnimationsModule.class))
+		FeatureHandler handler = OpenUtils.get().getFeatureHandler();
+		AnimationsFeature module = handler.getFeature(AnimationsFeature.class);
+		if (!handler.isEnabled(AnimationsFeature.class))
 			return false;
-		if (!Objects
-				.requireNonNull(module.getSetting("Force block animation", BooleanSetting.class))
-				.getValue())
+		if (!module.forceBlockAnimation)
 			return false;
 		ItemStack held = self.getHeldItem();
 		if (held == null || !(held.getItem() instanceof ItemSword))
 			return false;
-		if (Objects.requireNonNull(module.getSetting("Require mouse down", BooleanSetting.class))
-				.getValue()) {
+		if (module.requireMouseDown) {
 			return Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown();
 		}
 		return self.isSwingInProgress;

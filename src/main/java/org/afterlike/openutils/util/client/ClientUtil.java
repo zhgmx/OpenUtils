@@ -3,7 +3,7 @@ package org.afterlike.openutils.util.client;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
 import org.afterlike.openutils.OpenUtils;
-import org.afterlike.openutils.module.impl.client.DebugModule;
+import org.afterlike.openutils.feature.impl.client.DebugFeature;
 
 public class ClientUtil {
 	private static final Minecraft mc = Minecraft.getMinecraft();
@@ -22,7 +22,7 @@ public class ClientUtil {
 	}
 
 	public static void sendDebugMessage(final String message) {
-		if (notNull() && OpenUtils.get().getModuleHandler().isEnabled(DebugModule.class)) {
+		if (notNull() && OpenUtils.get().getFeatureHandler().isEnabled(DebugFeature.class)) {
 			sendMessage("&c[DEBUG] &r" + message);
 		}
 	}

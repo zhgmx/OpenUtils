@@ -2,8 +2,8 @@ package org.afterlike.openutils.platform.mixin.minecraft.gui;
 
 import net.minecraft.client.gui.FontRenderer;
 import org.afterlike.openutils.OpenUtils;
-import org.afterlike.openutils.module.impl.render.AntiShuffleModule;
-import org.afterlike.openutils.module.impl.render.NameHiderModule;
+import org.afterlike.openutils.feature.impl.render.AntiShuffleFeature;
+import org.afterlike.openutils.feature.impl.render.NameHiderFeature;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -15,12 +15,12 @@ public class FontRendererMixin {
 		if (string == null) {
 			return null;
 		}
-		if (OpenUtils.get().getModuleHandler().isEnabled(AntiShuffleModule.class)
+		if (OpenUtils.get().getFeatureHandler().isEnabled(AntiShuffleFeature.class)
 				&& string.contains("§k")) {
 			string = string.replace("§k", "");
 		}
-		if (OpenUtils.get().getModuleHandler().isEnabled(NameHiderModule.class)) {
-			string = OpenUtils.get().getModuleHandler().getModuleClass(NameHiderModule.class)
+		if (OpenUtils.get().getFeatureHandler().isEnabled(NameHiderFeature.class)) {
+			string = OpenUtils.get().getFeatureHandler().getFeature(NameHiderFeature.class)
 					.replaceName(string);
 		}
 		return string;
@@ -32,12 +32,12 @@ public class FontRendererMixin {
 		if (string == null) {
 			return null;
 		}
-		if (OpenUtils.get().getModuleHandler().isEnabled(AntiShuffleModule.class)
+		if (OpenUtils.get().getFeatureHandler().isEnabled(AntiShuffleFeature.class)
 				&& string.contains("§k")) {
 			string = string.replace("§k", "");
 		}
-		if (OpenUtils.get().getModuleHandler().isEnabled(NameHiderModule.class)) {
-			string = OpenUtils.get().getModuleHandler().getModuleClass(NameHiderModule.class)
+		if (OpenUtils.get().getFeatureHandler().isEnabled(NameHiderFeature.class)) {
+			string = OpenUtils.get().getFeatureHandler().getFeature(NameHiderFeature.class)
 					.replaceName(string);
 		}
 		return string;
