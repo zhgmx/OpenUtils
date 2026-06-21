@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import org.afterlike.openutils.OpenUtils;
 import org.afterlike.openutils.config.HudLayoutStore;
 import org.afterlike.openutils.config.OpenUtilsConfig;
+import org.afterlike.openutils.feature.impl.movement.NullMoveFeature;
 import org.afterlike.openutils.gui.OpenUtilsConfigScreen;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,6 +34,7 @@ public class ConfigHandler {
 		final Path path = getConfigPath();
 		this.config = new OpenUtilsConfig(OpenUtils.get().getFeatureHandler());
 		this.definition = Confikure.scan(this.config);
+		configureConditionalOptions();
 		this.guiState = defaultGuiState(this.definition);
 		this.loading = true;
 		try {
@@ -96,6 +98,7 @@ public class ConfigHandler {
 		if (this.definition == null) {
 			this.config = new OpenUtilsConfig(OpenUtils.get().getFeatureHandler());
 			this.definition = Confikure.scan(this.config);
+			configureConditionalOptions();
 			bindOptionListeners();
 		}
 		return this.definition;
@@ -131,6 +134,19 @@ public class ConfigHandler {
 			for (final ConfigOption option : category.options()) {
 				option.addListener(listener);
 			}
+		}
+	}
+
+	private void configureConditionalOptions() {
+		final NullMoveFeature snapTap = OpenUtils.get().getFeatureHandler()
+				.getFeature(NullMoveFeature.class);
+		final ConfigOption forwardBackPriority = this.definition.option("forward-back-priority");
+		if (forwardBackPriority != null) {
+			forwardBackPriority.visibleWhen(snapTap::showsForwardBackPriority);
+		}
+		final ConfigOption sidePriority = this.definition.option("side-priority");
+		if (sidePriority != null) {
+			sidePriority.visibleWhen(snapTap::showsSidePriority);
 		}
 	}
 

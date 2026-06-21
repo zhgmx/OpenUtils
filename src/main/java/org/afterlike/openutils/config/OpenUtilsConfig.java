@@ -65,9 +65,8 @@ public final class OpenUtilsConfig {
 		@Group(name = "No Jump Delay", description = "Removes Minecraft's repeated-jump cooldown.",
 				order = 0)
 		public final NoJumpDelayFeature noJumpDelay;
-		@Group(name = "Null Move",
-				description = "Resolves opposing movement keys by honoring the newest press.",
-				order = 1)
+		@Group(name = "Snap Tap",
+				description = "Resolves simultaneous opposite movement inputs per axis.", order = 1)
 		public final NullMoveFeature nullMove;
 		@Group(name = "Sprint", description = "Keeps sprint held while movement is active.",
 				order = 2)

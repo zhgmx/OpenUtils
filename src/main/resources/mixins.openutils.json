@@ -25,6 +25,7 @@
     "minecraft.client.renderer.entity.RenderFishMixin",
     "minecraft.client.renderer.entity.RenderManagerMixin",
     "minecraft.client.settings.KeyBindingAccessor",
+    "minecraft.util.MovementInputFromOptionsMixin",
     "minecraft.gui.FontRendererMixin",
     "minecraftforge.client.GuiIngameForgeMixin"
   ]
