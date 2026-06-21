@@ -1,5 +1,7 @@
 package org.afterlike.openutils.util.client;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.io.InputStreamReader;
@@ -12,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 public final class UpdateUtil {
 	private static final Logger logger = LogManager.getLogger(UpdateUtil.class);
-	private static final String API_URL = "https://api.github.com/repos/polariscli/OpenUtils/releases/latest";
+	private static final String API_URL = "https://api.github.com/repos/polariscli/OpenUtils/releases?per_page=20";
 	private static volatile String latest = null;
 	private UpdateUtil() {
 	}
@@ -31,10 +33,9 @@ public final class UpdateUtil {
 			conn.setConnectTimeout(5000);
 			conn.setReadTimeout(5000);
 			try (InputStreamReader reader = new InputStreamReader(conn.getInputStream())) {
-				JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
-				if (!json.has("tag_name"))
+				latest = latestPublishedTag(JsonParser.parseReader(reader).getAsJsonArray());
+				if (latest == null)
 					return;
-				latest = json.get("tag_name").getAsString();
 				String current = OpenUtils.get().getVersion();
 				OpenUtils.get().setOutdated(!current.equals("dev") && !current.equals(latest));
 				logger.info("Successfully checked latest version: {}", latest);
@@ -50,5 +51,21 @@ public final class UpdateUtil {
 
 	public static String getLatest() {
 		return latest;
+	}
+
+	private static String latestPublishedTag(final JsonArray releases) {
+		for (final JsonElement element : releases) {
+			if (!element.isJsonObject()) {
+				continue;
+			}
+			final JsonObject release = element.getAsJsonObject();
+			if (release.has("draft") && release.get("draft").getAsBoolean()) {
+				continue;
+			}
+			if (release.has("tag_name")) {
+				return release.get("tag_name").getAsString();
+			}
+		}
+		return null;
 	}
 }
