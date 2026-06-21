@@ -205,8 +205,7 @@ public final class OpenUtilsConfigScreen extends GuiScreen {
 		public void render(final GuiRenderer renderer, final GuiBounds bounds,
 				final ConfigTheme theme) {
 			renderer.text("OpenUtils", bounds.x, bounds.y, theme.text);
-			renderer.text("v" + OpenUtils.get().getVersion(), bounds.x, bounds.y + 12,
-					theme.mutedText);
+			renderer.text(OpenUtils.get().getVersion(), bounds.x, bounds.y + 12, theme.mutedText);
 		}
 	}
 }
