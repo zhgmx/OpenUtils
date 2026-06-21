@@ -1,72 +1,82 @@
-# OpenUtils
+<h1 align="center">OpenUtils</h1>
 
-OpenUtils is an open-source Minecraft 1.8.9 utility mod for client-side gameplay, HUD, Hypixel, and Bed Wars features.
+<p align="center">
+  <a href="https://github.com/zhgmx/OpenUtils/releases/latest"><img src="https://img.shields.io/github/v/release/zhgmx/OpenUtils?style=flat-square" alt="Latest release"></a>
+  <img src="https://img.shields.io/badge/Minecraft-1.8.9-62b47a?style=flat-square" alt="Minecraft 1.8.9">
+  <a href="https://github.com/zhgmx/OpenUtils/actions/workflows/release.yml"><img src="https://img.shields.io/github/actions/workflow/status/zhgmx/OpenUtils/release.yml?branch=main&style=flat-square" alt="Release workflow"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-blue?style=flat-square" alt="License"></a>
+</p>
 
-> [!WARNING]  
-> OpenUtils is provided as-is and used at your own risk. Some features may be controversial; all are optional and restricted to behavior technically possible in vanilla Minecraft.
-
----
-
-## Why OpenUtils Exists
-
-In the legacy Minecraft community (especially Hypixel players):
-
-- Useful projects disappear without warning
-- Code gets private, deleted, or intentionally broken
-- Downstream projects are forced to rewrite the same utilities repeatedly
-
-OpenUtils is designed to be:
-
-- **Open-source**
-- **Copyleft-protected**
-- **Forkable**
-
----
+`OpenUtils` is an open-source Minecraft 1.8.9 Forge utility mod for client-side gameplay, HUD and Hypixel features.
+It is built for players who want practical quality-of-life tools that stay available, readable, and easy to fork.
 
 ## Features
 
-- General-purpose utility features
-- Hypixel-specific utility features
-- Other QOL features to improve your legacy Minecraft experience
-- Click GUI design ported from **raven b3**
+<details>
+<summary>View feature list</summary>
 
----
+- No Jump Delay
+- Snap Tap
+- Sprint
+- Action Sounds
+- No Break Delay
+- No Hit Delay
+- Animations
+- Anti Debuff
+- Anti Shuffle
+- Camera
+- Cape
+- Damage Tags
+- Free Look
+- Name Hider
+- Target HUD
+- Thick Rods
+- Time Changer
+- Auto GG
+- Denicker
+- Quick Math
+- Armor Alerts
+- Final Kills HUD
+- Item Alerts
+- Quick Shop
+- Resource Count
+- Timers HUD
+- Upgrade Alerts
+- Upgrades HUD
+- Debug
+- VPN Status
 
-## Credits
+</details>
 
-- **Click GUI Design** - ported from **raven b3**  
-  https://www.youtube.com/@blowsy  
-  https://www.youtube.com/watch?v=FCPr6S1bLis
+## Install
 
----
+Download the latest jar from the [releases page](https://github.com/zhgmx/OpenUtils/releases/latest) and place it in your Forge 1.8.9 `mods` folder.
 
-## Licensing
+## Build
 
-### OpenUtils License
-OpenUtils is licensed under the **GNU General Public License v3.0 (GPL-3.0)**.
+```bash
+./gradlew spotlessCheck compileJava assemble
+```
 
-This means:
+The Forge jar is written to:
 
-- You are free to use, modify, and redistribute OpenUtils
-- Any distributed derivative works **must remain open-source**
-- Modifications must be provided under the same license
+```text
+build/libs/OpenUtils-<version>-forge.jar
+```
 
-## Disclaimer
+For a development client:
 
-This project is provided **as-is**, without warranty of any kind.  
-Minecraft and related trademarks belong to their respective owners.
-
----
+```bash
+./gradlew runClient
+```
 
 ## Contributing
 
-Contributions are welcome and appreciated.
+Small, focused pull requests are easiest to review.
+Please follow the existing formatting and keep changes scoped to the feature or system you are touching.
 
-By contributing, you agree to:
+## License
 
-- Submit small, focused pull requests with a clear scope
-- Follow existing code style and project conventions
-- Preserve all third-party license headers and attributions
-- License your contributions under **GPL-3.0**
+OpenUtils is licensed under the **GNU General Public License v3.0**.
 
-If you depend on OpenUtils, you are encouraged to fork and maintain your own copy to ensure long-term availability.
+OpenUtils is provided without warranty. Minecraft and related trademarks belong to their respective owners.
