@@ -16,10 +16,10 @@ public class EntityLivingBaseMixin {
 	private void isPotionActive(final Potion potionIn, final CallbackInfoReturnable<Boolean> cir) {
 		if (!OpenUtils.get().getFeatureHandler().isEnabled(AntiDebuffFeature.class))
 			return;
-		final AntiDebuffFeature module = OpenUtils.get().getFeatureHandler()
+		final AntiDebuffFeature feature = OpenUtils.get().getFeatureHandler()
 				.getFeature(AntiDebuffFeature.class);
-		if ((module.nausea && potionIn == Potion.confusion)
-				|| (module.blindness && potionIn == Potion.blindness)) {
+		if ((feature.nausea && potionIn == Potion.confusion)
+				|| (feature.blindness && potionIn == Potion.blindness)) {
 			cir.setReturnValue(false);
 		}
 	}

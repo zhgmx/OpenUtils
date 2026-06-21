@@ -17,8 +17,8 @@ public class WorldInfoMixin {
 	private void ou$getWorldTime(final CallbackInfoReturnable<Long> cir) {
 		if (!OpenUtils.get().getFeatureHandler().isEnabled(TimeChangerFeature.class))
 			return;
-		final TimeChangerFeature module = OpenUtils.get().getFeatureHandler()
+		final TimeChangerFeature feature = OpenUtils.get().getFeatureHandler()
 				.getFeature(TimeChangerFeature.class);
-		cir.setReturnValue(module.timeToTicks());
+		cir.setReturnValue(feature.timeToTicks());
 	}
 }

@@ -43,7 +43,7 @@ public class FeatureHandler {
 		this.register(new ThickRodsFeature());
 		// world
 		this.register(new TimeChangerFeature());
-		this.register(new WeatherFeature()); // TODO: impl
+		this.register(new WeatherFeature());
 		// hypixel
 		this.register(new AutoGGFeature());
 		this.register(new DenickerFeature());

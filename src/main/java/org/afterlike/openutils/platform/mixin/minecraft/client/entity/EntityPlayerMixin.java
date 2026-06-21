@@ -21,15 +21,15 @@ public class EntityPlayerMixin {
 		if (!(self instanceof EntityPlayerSP))
 			return false;
 		FeatureHandler handler = OpenUtils.get().getFeatureHandler();
-		AnimationsFeature module = handler.getFeature(AnimationsFeature.class);
+		AnimationsFeature feature = handler.getFeature(AnimationsFeature.class);
 		if (!handler.isEnabled(AnimationsFeature.class))
 			return false;
-		if (!module.forceBlockAnimation)
+		if (!feature.forceBlockAnimation)
 			return false;
 		ItemStack held = self.getHeldItem();
 		if (held == null || !(held.getItem() instanceof ItemSword))
 			return false;
-		if (module.requireMouseDown) {
+		if (feature.requireMouseDown) {
 			return Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown();
 		}
 		return self.isSwingInProgress;

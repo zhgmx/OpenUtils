@@ -68,7 +68,7 @@ public final class OpenUtilsConfigScreen extends GuiScreen {
 			this.gui.drag(this.width, this.height, rawMouseX(), rawMouseY());
 		}
 		this.gui.render(this.renderer, this.width, this.height, mouseX, mouseY);
-		drawHudLayoutButton(mouseX, mouseY);
+		drawLayoutEditorButton(mouseX, mouseY);
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 
@@ -77,7 +77,7 @@ public final class OpenUtilsConfigScreen extends GuiScreen {
 			throws IOException {
 		ensureInitialized();
 		if (mouseButton == 0) {
-			if (hudLayoutButton().contains(mouseX, mouseY)) {
+			if (layoutEditorButton().contains(mouseX, mouseY)) {
 				this.mc.displayGuiScreen(new LayoutEditorScreen(this));
 				return;
 			}
@@ -162,8 +162,8 @@ public final class OpenUtilsConfigScreen extends GuiScreen {
 		return this.height - Mouse.getY() * this.height / this.mc.displayHeight - 1;
 	}
 
-	private void drawHudLayoutButton(final int mouseX, final int mouseY) {
-		final GuiBounds button = hudLayoutButton();
+	private void drawLayoutEditorButton(final int mouseX, final int mouseY) {
+		final GuiBounds button = layoutEditorButton();
 		final ConfigTheme theme = currentTheme();
 		GuiPrimitives.inlineButton(this.renderer, theme, button.x, button.y, button.width,
 				button.height, button.contains(mouseX, mouseY), true);
@@ -171,7 +171,7 @@ public final class OpenUtilsConfigScreen extends GuiScreen {
 				theme.text);
 	}
 
-	private GuiBounds hudLayoutButton() {
+	private GuiBounds layoutEditorButton() {
 		final GuiBounds panel = panelBounds();
 		return new GuiBounds(panel.x + 8, panel.y + panel.height - SIDEBAR_FOOTER_HEIGHT - 8,
 				SIDEBAR_WIDTH - 16, SIDEBAR_FOOTER_HEIGHT);
