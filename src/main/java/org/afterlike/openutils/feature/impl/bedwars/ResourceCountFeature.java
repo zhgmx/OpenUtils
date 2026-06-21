@@ -18,7 +18,7 @@ import re.tsuku.fastbus.Subscribe;
 
 public class ResourceCountFeature extends ToggleableFeature {
 	@Option(name = "Enable Resource Count",
-			description = "Notify when tracked BedWars resources change in your inventory.",
+			description = "Notify when tracked Bed Wars resources change in your inventory.",
 			order = 0)
 	public boolean enabled;
 	@Option(name = "Track iron", description = "Notify when your iron count changes.", order = 1)

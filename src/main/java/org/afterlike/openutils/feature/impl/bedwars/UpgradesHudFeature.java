@@ -19,7 +19,7 @@ import re.tsuku.fastbus.Subscribe;
 public class UpgradesHudFeature extends ToggleableFeature implements HudFeature {
 	private final Position position = new Position(5, 100);
 	@Option(name = "Enable Upgrades HUD",
-			description = "Show purchased team upgrades as a movable BedWars HUD.", order = 0)
+			description = "Show purchased team upgrades as a movable Bed Wars HUD.", order = 0)
 	public boolean enabled;
 	@Option(name = "Drop shadow", description = "Draw upgrade lines with Minecraft's text shadow.",
 			order = 1)

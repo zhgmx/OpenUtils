@@ -22,7 +22,7 @@ import re.tsuku.fastbus.Subscribe;
 
 public class UpgradeAlertsFeature extends ToggleableFeature {
 	@Option(name = "Enable Upgrade Alerts",
-			description = "Call out enemy sword and protection upgrades during BedWars games.",
+			description = "Call out enemy sword and protection upgrades during Bed Wars games.",
 			order = 0)
 	public boolean enabled;
 	@Option(name = "Ping sound",

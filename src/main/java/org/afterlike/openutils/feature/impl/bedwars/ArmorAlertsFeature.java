@@ -22,7 +22,7 @@ import re.tsuku.fastbus.Subscribe;
 
 public class ArmorAlertsFeature extends ToggleableFeature {
 	@Option(name = "Enable Armor Alerts",
-			description = "Call out enemy armor upgrades during BedWars games.", order = 0)
+			description = "Call out enemy armor upgrades during Bed Wars games.", order = 0)
 	public boolean enabled;
 	@Option(name = "Ping sound", description = "Choose which armor purchases should play a ping.",
 			order = 1)

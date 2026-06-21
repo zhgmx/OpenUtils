@@ -170,7 +170,7 @@ public final class OpenUtilsConfig {
 		@Group(name = "Item Alerts", description = "Alerts when enemies reveal important items.",
 				order = 2)
 		public final ItemAlertsFeature itemAlerts;
-		@Group(name = "Quick Shop", description = "Shift-clicks Bed Wars shop purchases.",
+		@Group(name = "Quick Shop", description = "Middle-clicks Bed Wars shop purchases.",
 				order = 3)
 		public final QuickShopFeature quickShop;
 		@Group(name = "Resource Count", description = "Tracks inventory resource count changes.",

@@ -23,7 +23,7 @@ import re.tsuku.fastbus.Subscribe;
 public class FinalKillsHudFeature extends ToggleableFeature implements HudFeature {
 	private final Position position = new Position(5, 50);
 	@Option(name = "Enable Final Kills HUD",
-			description = "Track final kills as a movable BedWars HUD list.", order = 0)
+			description = "Track final kills as a movable Bed Wars HUD list.", order = 0)
 	public boolean enabled;
 	@Option(name = "Drop shadow",
 			description = "Draw final-kill lines with Minecraft's text shadow.", order = 1)

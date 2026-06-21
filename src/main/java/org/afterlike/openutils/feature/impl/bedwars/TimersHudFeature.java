@@ -22,7 +22,7 @@ import re.tsuku.fastbus.Subscribe;
 public class TimersHudFeature extends ToggleableFeature implements HudFeature {
 	private final Position position = new Position(5, 150);
 	@Option(name = "Enable Timers HUD",
-			description = "Show BedWars game and generator timers as a movable HUD.", order = 0)
+			description = "Show Bed Wars game and generator timers as a movable HUD.", order = 0)
 	public boolean enabled;
 	@Option(name = "Drop shadow", description = "Draw timer text with Minecraft's text shadow.",
 			order = 1)

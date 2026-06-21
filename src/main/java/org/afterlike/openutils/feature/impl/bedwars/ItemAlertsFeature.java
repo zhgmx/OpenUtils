@@ -32,7 +32,7 @@ import re.tsuku.fastbus.Subscribe;
 public class ItemAlertsFeature extends ToggleableFeature {
 	private static final long COOLDOWN_TIME = 10_000L;
 	@Option(name = "Enable Item Alerts",
-			description = "Warn when enemies reveal important BedWars items.", order = 0)
+			description = "Warn when enemies reveal important Bed Wars items.", order = 0)
 	public boolean enabled;
 	private final Item potionJump, potionSpeed, potionInvis, machineGunBow, charlieUnicorn,
 			iceBridge, sleepingDust, devastatorBow, miracleStars, bridgeZapper, shuriken,

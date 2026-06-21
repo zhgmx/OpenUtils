@@ -17,7 +17,7 @@ import re.tsuku.fastbus.Subscribe;
 
 public class QuickShopFeature extends ToggleableFeature {
 	@Option(name = "Enable Quick Shop",
-			description = "Use shift-click behavior for BedWars shop purchases.", order = 0)
+			description = "Use middle-click behavior for Bed Wars shop purchases.", order = 0)
 	public boolean enabled;
 	public QuickShopFeature() {
 		super("Quick Shop", FeatureCategory.BEDWARS);
