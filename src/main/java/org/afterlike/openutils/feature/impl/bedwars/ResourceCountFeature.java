@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import org.afterlike.openutils.event.api.EventPhase;
 import org.afterlike.openutils.event.impl.GameTickEvent;
+import org.afterlike.openutils.event.impl.WorldLoadEvent;
 import org.afterlike.openutils.feature.api.FeatureCategory;
 import org.afterlike.openutils.feature.api.ToggleableFeature;
 import org.afterlike.openutils.util.client.ClientUtil;
@@ -15,7 +16,6 @@ import org.afterlike.openutils.util.game.GameModeUtil;
 import re.tsuku.confikure.annotations.Option;
 import re.tsuku.fastbus.Subscribe;
 
-// TODO: rewrite - currently a direct port from meowtils
 public class ResourceCountFeature extends ToggleableFeature {
 	@Option(name = "Enable Resource Count",
 			description = "Notify when tracked BedWars resources change in your inventory.",
@@ -38,16 +38,15 @@ public class ResourceCountFeature extends ToggleableFeature {
 		super("Resource Count", FeatureCategory.BEDWARS);
 	}
 	private final Map<Item, Integer> lastCounts = new HashMap<>();
+	private boolean initialized;
 	@Subscribe
 	private void onTick(final GameTickEvent event) {
 		if (event.getPhase() != EventPhase.POST)
 			return;
-		if (!GameModeUtil.onHypixel())
+		if (!GameModeUtil.onHypixel() || !GameModeUtil.isInBedWarsGame() || !ClientUtil.notNull()) {
+			resetCounts();
 			return;
-		if (GameModeUtil.getBedWarsStatus() != 3)
-			return;
-		if (!ClientUtil.notNull())
-			return;
+		}
 		Map<Item, Integer> current = new HashMap<>();
 		initCounts(current);
 		for (ItemStack stack : mc.thePlayer.inventory.mainInventory) {
@@ -57,6 +56,12 @@ public class ResourceCountFeature extends ToggleableFeature {
 			if (!current.containsKey(item))
 				continue;
 			current.put(item, current.get(item) + stack.stackSize);
+		}
+		if (!initialized) {
+			lastCounts.clear();
+			lastCounts.putAll(current);
+			initialized = true;
+			return;
 		}
 		handleChanges(current);
 		lastCounts.clear();
@@ -117,7 +122,12 @@ public class ResourceCountFeature extends ToggleableFeature {
 
 	private void resetCounts() {
 		lastCounts.clear();
-		initCounts(lastCounts);
+		initialized = false;
+	}
+
+	@Subscribe
+	private void onWorldLoad(final WorldLoadEvent event) {
+		resetCounts();
 	}
 
 	@Override

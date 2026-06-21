@@ -29,7 +29,7 @@ public class QuickShopFeature extends ToggleableFeature {
 	private void onWindowClick(final WindowClickEvent event) {
 		if (!ClientUtil.notNull())
 			return;
-		if (GameModeUtil.getBedWarsStatus() != 3)
+		if (!GameModeUtil.isInBedWarsGame())
 			return;
 		Container container = event.getContainer().inventorySlots;
 		if (!(container instanceof ContainerChest))

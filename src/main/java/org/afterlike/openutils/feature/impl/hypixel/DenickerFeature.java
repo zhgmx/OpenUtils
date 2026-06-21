@@ -6,7 +6,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.authlib.properties.Property;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import org.afterlike.openutils.event.api.EventPhase;
 import org.afterlike.openutils.event.impl.GameTickEvent;
@@ -291,7 +296,6 @@ public class DenickerFeature extends ToggleableFeature {
 	}
 
 	private void parseSkinData(NetworkPlayerInfo info) {
-		// TODO: why is this not formatted????
 		final String displayName = info.getDisplayName() != null
 				? info.getDisplayName().getFormattedText()
 				: info.getGameProfile().getName();

@@ -49,7 +49,7 @@ public class ArmorAlertsFeature extends ToggleableFeature {
 	private void onPacket(final ReceivePacketEvent event) {
 		if (!ClientUtil.notNull())
 			return;
-		if (GameModeUtil.getBedWarsStatus() != 3)
+		if (!GameModeUtil.isInBedWarsGame())
 			return;
 		if (!(event.getPacket() instanceof S04PacketEntityEquipment))
 			return;

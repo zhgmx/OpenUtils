@@ -197,7 +197,7 @@ public final class OpenUtilsConfig {
 	public static final class Client {
 		@Group(name = "Debug", description = "Diagnostic logging controls.", order = 0)
 		public final DebugFeature debug;
-		@Group(name = "GUI", description = "Config screen controls.", order = 1)
+		@Group(name = "Config Screen", description = "Config menu controls.", order = 1)
 		public final GuiFeature gui;
 		@Group(name = "VPN Status", description = "One-shot network status check.", order = 2)
 		public final VPNStatusFeature vpnStatus;

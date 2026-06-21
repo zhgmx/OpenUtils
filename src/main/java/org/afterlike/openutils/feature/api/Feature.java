@@ -1,5 +1,6 @@
 package org.afterlike.openutils.feature.api;
 
+import java.util.Locale;
 import net.minecraft.client.Minecraft;
 import org.afterlike.openutils.OpenUtils;
 
@@ -62,6 +63,16 @@ public class Feature {
 
 	public String getName() {
 		return name;
+	}
+
+	public String getId() {
+		final String className = getClass().getSimpleName();
+		final String baseName = className.endsWith("Feature")
+				? className.substring(0, className.length() - "Feature".length())
+				: className;
+		final String normalizedName = baseName.replaceAll("([a-z0-9])([A-Z])", "$1-$2")
+				.toLowerCase(Locale.ROOT);
+		return category.name().toLowerCase(Locale.ROOT) + ":" + normalizedName;
 	}
 
 	public FeatureCategory getCategory() {

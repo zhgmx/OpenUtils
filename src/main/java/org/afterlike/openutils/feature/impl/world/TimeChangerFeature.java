@@ -26,11 +26,7 @@ public class TimeChangerFeature extends ToggleableFeature {
 
 	public long timeToTicks() {
 		if (fastTime) {
-			final long speed = (long) fastSpeed;
-			if (speed <= 0) {
-				return timeToMcTime(time);
-			}
-			return (Minecraft.getSystemTime() % (24000L / speed)) * speed;
+			return (long) ((Minecraft.getSystemTime() * Math.max(0.1D, fastSpeed)) % 24000.0D);
 		}
 		return timeToMcTime(time);
 	}

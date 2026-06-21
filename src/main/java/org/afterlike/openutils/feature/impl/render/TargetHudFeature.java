@@ -119,8 +119,8 @@ public class TargetHudFeature extends ToggleableFeature implements HudFeature {
 		float healthPercent = Math.min(1.0f, Math.max(0.0f, displayHealth / maxHealth));
 		float healthDelta = playerHealth - targetHealth;
 		float healthDeltaRatio = Math.min(1.0f, Math.max(0.0f, (healthDelta + 1.0f) / 2.0f));
-		final int x = position.getX();
-		final int y = position.getY();
+		final int x = position.getX(getHudPreviewWidth());
+		final int y = position.getY(getHudPreviewHeight());
 		final boolean shadow = useHudDropShadow();
 		final String name = entity.getDisplayName().getFormattedText();
 		final String healthText = HEALTH_FORMAT.format(targetHealth)

@@ -4,11 +4,9 @@ import org.apache.commons.lang3.SystemUtils
 
 // Buildscript based on https://github.com/lineargraph/Forge1.8.9Template (Unlicense)
 
-// Version from GitHub Tag:
 val gitRef : String? = System.getenv("GITHUB_REF_NAME")
 version = gitRef ?: "dev"
 
-// Plugins:
 plugins {
     idea
     java
@@ -19,14 +17,12 @@ plugins {
     id("dev.architectury.architectury-pack200") version "0.1.3"
 }
 
-// Toolchains:
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
     toolchain.languageVersion.set(JavaLanguageVersion.of(8))
 }
 
-// Minecraft configuration:
 loom {
     log4jConfigs.from(file("extras/log4j2.xml"))
     launchConfigs {
@@ -55,7 +51,6 @@ loom {
     }
 }
 
-// Blossom configuration:
 sourceSets {
     main {
         blossom {
@@ -76,7 +71,6 @@ idea {
     }
 }
 
-// Spotless Configuration:
 spotless {
     java {
         importOrder()
@@ -88,7 +82,6 @@ spotless {
     }
 }
 
-// Dependencies:
 repositories {
     mavenCentral()
     maven("https://repo.spongepowered.org/maven/")
@@ -116,7 +109,6 @@ dependencies {
     runtimeOnly("me.djtheredstoner:DevAuth-forge-legacy:1.2.1")
 }
 
-// Tasks:
 tasks {
     withType(JavaCompile::class) {
         options.encoding = "UTF-8"

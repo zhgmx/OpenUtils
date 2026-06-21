@@ -14,39 +14,43 @@ public class GameModeUtil {
 		return false;
 	}
 
-	/**
-	 * Returns the current Bed Wars status.
-	 *
-	 * @return status code:
-	 *         <ul>
-	 *         <li>0 — Not in Bed Wars</li>
-	 *         <li>1 — In Lobby</li>
-	 *         <li>2 — In Pregame</li>
-	 *         <li>3 — In Game</li>
-	 *         </ul>
-	 */
+	public static boolean isInBedWarsGame() {
+		return getBedWarsStatusType() == BedWarsStatus.IN_GAME;
+	}
+
 	public static int getBedWarsStatus() {
+		return getBedWarsStatusType().code;
+	}
+
+	public static BedWarsStatus getBedWarsStatusType() {
 		List<String> sb = WorldUtil.getScoreboard();
 		if (sb.size() < 7) {
-			return 0;
+			return BedWarsStatus.NOT_BEDWARS;
 		}
 		// title: BED WARS
 		String title = sb.get(0);
 		if (!title.contains("BED") || !title.contains("WARS")) {
-			return 0;
+			return BedWarsStatus.NOT_BEDWARS;
 		}
 		// L = lobby
 		if (sb.get(1).contains("§8L")) {
-			return 1;
+			return BedWarsStatus.LOBBY;
 		}
 		// pregame
 		if (sb.get(4).contains("/") && sb.get(4).contains("§a")) {
-			return 2;
+			return BedWarsStatus.PREGAME;
 		}
 		// in game
 		if (sb.get(5).contains("§c") && sb.get(6).contains("§9")) {
-			return 3;
+			return BedWarsStatus.IN_GAME;
 		}
-		return 0;
+		return BedWarsStatus.NOT_BEDWARS;
+	}
+	public enum BedWarsStatus {
+		NOT_BEDWARS(0), LOBBY(1), PREGAME(2), IN_GAME(3);
+		private final int code;
+		BedWarsStatus(final int code) {
+			this.code = code;
+		}
 	}
 }

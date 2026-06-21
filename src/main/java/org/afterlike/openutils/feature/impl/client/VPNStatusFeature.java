@@ -64,7 +64,6 @@ public class VPNStatusFeature extends Feature {
 				}
 				JsonObject json = JsonParser.parseString(response.toString()).getAsJsonObject();
 				if (!"success".equalsIgnoreCase(json.get("status").getAsString())) {
-					ClientUtil.sendMessage("Failed success...");
 					throw new RuntimeException(json.get("message").getAsString());
 				}
 				String ip = json.get("query").getAsString();
@@ -79,7 +78,7 @@ public class VPNStatusFeature extends Feature {
 				ClientUtil.sendMessage("&bIP: &7" + maskedIp);
 				ClientUtil.sendMessage("&bLocation: &7" + city + ", " + country);
 				ClientUtil.sendMessage(
-						"&bStatus: &7" + (vpnDetected ? "&aConnected" : "&cNot Connected"));
+						"&bProxy/VPN: &7" + (vpnDetected ? "&cDetected" : "&aNot detected"));
 			} catch (Exception e) {
 				ClientUtil.sendMessage("&cFailed to check VPN status.");
 				LogManager.getLogger().warn(e.getMessage(), e);

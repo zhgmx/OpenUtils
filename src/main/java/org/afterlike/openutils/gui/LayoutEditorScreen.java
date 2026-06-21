@@ -26,32 +26,31 @@ public final class LayoutEditorScreen extends GuiScreen {
 	private static final int BUTTON_HEIGHT = 20;
 	private static final int ROW_GAP = 5;
 	private final GuiScreen previousScreen;
-	private final List<HudFeature> hudFeatures = new ArrayList<>();
-	private HudFeature selectedFeature;
+	private final List<HudEntry> hudEntries = new ArrayList<>();
+	private HudEntry selectedEntry;
 	private ForgeGuiRenderer renderer;
 	private boolean dragging;
 	private int dragOffsetX;
 	private int dragOffsetY;
-	public LayoutEditorScreen(final GuiScreen previousScreen, final HudFeature selectedFeature) {
-		this.previousScreen = previousScreen;
-		this.selectedFeature = selectedFeature;
-	}
-
 	public LayoutEditorScreen(final GuiScreen previousScreen) {
-		this(previousScreen, null);
+		this.previousScreen = previousScreen;
 	}
 
 	@Override
 	public void initGui() {
 		this.renderer = new ForgeGuiRenderer(this.mc);
-		this.hudFeatures.clear();
+		final Feature previousSelection = this.selectedEntry != null
+				? this.selectedEntry.feature
+				: null;
+		this.hudEntries.clear();
 		for (final Feature feature : OpenUtils.get().getFeatureHandler().getFeatures()) {
 			if (feature instanceof HudFeature) {
-				this.hudFeatures.add((HudFeature) feature);
+				this.hudEntries.add(new HudEntry(feature, (HudFeature) feature));
 			}
 		}
-		if (!this.hudFeatures.contains(this.selectedFeature)) {
-			this.selectedFeature = this.hudFeatures.isEmpty() ? null : this.hudFeatures.get(0);
+		this.selectedEntry = findEntry(previousSelection);
+		if (this.selectedEntry == null) {
+			this.selectedEntry = this.hudEntries.isEmpty() ? null : this.hudEntries.get(0);
 		}
 		Keyboard.enableRepeatEvents(false);
 	}
@@ -81,14 +80,14 @@ public final class LayoutEditorScreen extends GuiScreen {
 		}
 		final int currentMouseX = rawMouseX();
 		final int currentMouseY = rawMouseY();
-		for (int index = this.hudFeatures.size() - 1; index >= 0; index--) {
-			final HudFeature feature = this.hudFeatures.get(index);
-			final GuiBounds bounds = hudBounds(feature);
+		for (int index = this.hudEntries.size() - 1; index >= 0; index--) {
+			final HudEntry entry = this.hudEntries.get(index);
+			final GuiBounds bounds = hudBounds(entry);
 			if (bounds.contains(currentMouseX, currentMouseY)) {
-				this.selectedFeature = feature;
+				this.selectedEntry = entry;
 				this.dragging = true;
-				this.dragOffsetX = currentMouseX - feature.getHudPosition().getX();
-				this.dragOffsetY = currentMouseY - feature.getHudPosition().getY();
+				this.dragOffsetX = currentMouseX - (bounds.x + 4);
+				this.dragOffsetY = currentMouseY - (bounds.y + 4);
 				return;
 			}
 		}
@@ -127,15 +126,16 @@ public final class LayoutEditorScreen extends GuiScreen {
 	}
 
 	private void updateDragging(final int mouseX, final int mouseY) {
-		if (!this.dragging || this.selectedFeature == null) {
+		if (!this.dragging || this.selectedEntry == null) {
 			return;
 		}
 		if (!Mouse.isButtonDown(0)) {
 			finishDragging();
 			return;
 		}
-		this.selectedFeature.getHudPosition().setScreenPosition(mouseX - this.dragOffsetX,
-				mouseY - this.dragOffsetY);
+		final GuiBounds bounds = hudBounds(this.selectedEntry);
+		this.selectedEntry.hud.getHudPosition().setScreenPosition(mouseX - this.dragOffsetX,
+				mouseY - this.dragOffsetY, bounds.width - 8, bounds.height - 8);
 	}
 
 	private boolean handlePanelClick(final int mouseX, final int mouseY) {
@@ -151,9 +151,9 @@ public final class LayoutEditorScreen extends GuiScreen {
 			resetSelected();
 			return true;
 		}
-		for (int index = 0; index < this.hudFeatures.size(); index++) {
+		for (int index = 0; index < this.hudEntries.size(); index++) {
 			if (featureButton(index).contains(mouseX, mouseY)) {
-				this.selectedFeature = this.hudFeatures.get(index);
+				this.selectedEntry = this.hudEntries.get(index);
 				return true;
 			}
 		}
@@ -165,28 +165,27 @@ public final class LayoutEditorScreen extends GuiScreen {
 		GuiPrimitives.frame(this.renderer, theme, panel);
 		this.renderer.centeredText("Layout Editor", panel.x, panel.y + PANEL_PADDING, panel.width,
 				theme.text);
-		for (int index = 0; index < this.hudFeatures.size(); index++) {
+		for (int index = 0; index < this.hudEntries.size(); index++) {
 			drawFeatureButton(index, mouseX, mouseY, theme);
 		}
-		drawFooterButton(resetButton(), "Reset", mouseX, mouseY, theme,
-				this.selectedFeature != null);
+		drawFooterButton(resetButton(), "Reset", mouseX, mouseY, theme, this.selectedEntry != null);
 		drawFooterButton(doneButton(), "Done", mouseX, mouseY, theme, true);
 	}
 
 	private void drawFeatureButton(final int index, final int mouseX, final int mouseY,
 			final ConfigTheme theme) {
-		final HudFeature feature = this.hudFeatures.get(index);
+		final HudEntry entry = this.hudEntries.get(index);
 		final GuiBounds button = featureButton(index);
 		final boolean hovered = button.contains(mouseX, mouseY);
-		final boolean selected = feature == this.selectedFeature;
+		final boolean selected = entry == this.selectedEntry;
 		GuiPrimitives.inlineButton(this.renderer, theme, button.x, button.y, button.width,
 				button.height, hovered, true);
 		if (selected) {
 			GuiPrimitives.border(this.renderer, theme, button, theme.accent);
 		}
 		this.renderer.centeredText(
-				GuiPrimitives.clip(featureName(feature), this.renderer, button.width - 8), button.x,
-				button.y + 6, button.width, selected ? theme.text : theme.mutedText);
+				GuiPrimitives.clip(entry.feature.getName(), this.renderer, button.width - 8),
+				button.x, button.y + 6, button.width, selected ? theme.text : theme.mutedText);
 	}
 
 	private void drawFooterButton(final GuiBounds button, final String text, final int mouseX,
@@ -198,19 +197,19 @@ public final class LayoutEditorScreen extends GuiScreen {
 	}
 
 	private void drawHudElements(final int mouseX, final int mouseY, final ConfigTheme theme) {
-		for (final HudFeature feature : this.hudFeatures) {
-			final GuiBounds bounds = hudBounds(feature);
+		for (final HudEntry entry : this.hudEntries) {
+			final GuiBounds bounds = hudBounds(entry);
 			final boolean hovered = bounds.contains(mouseX, mouseY);
-			final boolean selected = feature == this.selectedFeature;
+			final boolean selected = entry == this.selectedEntry;
 			GuiPrimitives.frame(this.renderer, theme, bounds.x, bounds.y, bounds.width,
 					bounds.height, hovered, selected, true);
-			feature.renderHudPreview(bounds.x + 4, bounds.y + 4);
+			entry.hud.renderHudPreview(bounds.x + 4, bounds.y + 4);
 		}
 	}
 
 	private GuiBounds editorPanelBounds() {
 		final int columns = featureColumns();
-		final int rows = Math.max(1, (this.hudFeatures.size() + columns - 1) / columns);
+		final int rows = Math.max(1, (this.hudEntries.size() + columns - 1) / columns);
 		final int requestedWidth = columns == 3 ? PANEL_WIDTH : COMPACT_PANEL_WIDTH;
 		final int panelWidth = Math.min(requestedWidth, Math.max(180, this.width - 24));
 		final int panelHeight = PANEL_PADDING + this.mc.fontRendererObj.FONT_HEIGHT + 7
@@ -245,18 +244,20 @@ public final class LayoutEditorScreen extends GuiScreen {
 		return new GuiBounds(reset.x + reset.width + ROW_GAP, reset.y, reset.width, reset.height);
 	}
 
-	private GuiBounds hudBounds(final HudFeature feature) {
-		final Position position = feature.getHudPosition();
-		return new GuiBounds(position.getX() - 4, position.getY() - 4,
-				feature.getHudPreviewWidth() + 8,
-				Math.max(this.mc.fontRendererObj.FONT_HEIGHT, feature.getHudPreviewHeight()) + 8);
+	private GuiBounds hudBounds(final HudEntry entry) {
+		final Position position = entry.hud.getHudPosition();
+		final int elementWidth = entry.hud.getHudPreviewWidth();
+		final int elementHeight = Math.max(this.mc.fontRendererObj.FONT_HEIGHT,
+				entry.hud.getHudPreviewHeight());
+		return new GuiBounds(position.getX(elementWidth) - 4, position.getY(elementHeight) - 4,
+				elementWidth + 8, elementHeight + 8);
 	}
 
 	private void resetSelected() {
-		if (this.selectedFeature == null) {
+		if (this.selectedEntry == null) {
 			return;
 		}
-		this.selectedFeature.getHudPosition().reset();
+		this.selectedEntry.hud.getHudPosition().reset();
 		saveLayout();
 	}
 
@@ -270,19 +271,33 @@ public final class LayoutEditorScreen extends GuiScreen {
 	}
 
 	private void updateSelectedAnchor() {
-		if (this.selectedFeature == null) {
+		if (this.selectedEntry == null) {
 			return;
 		}
-		final GuiBounds bounds = hudBounds(this.selectedFeature);
-		final Position position = this.selectedFeature.getHudPosition();
+		final GuiBounds bounds = hudBounds(this.selectedEntry);
+		final Position position = this.selectedEntry.hud.getHudPosition();
 		final ScaledResolution resolution = new ScaledResolution(this.mc);
-		final int screenX = position.getX();
-		final int screenY = position.getY();
+		final int elementWidth = bounds.width - 8;
+		final int elementHeight = bounds.height - 8;
+		final int screenX = position.getX(elementWidth);
+		final int screenY = position.getY(elementHeight);
 		final Anchor anchor = Anchor.detect(bounds.x + bounds.width / 2,
 				bounds.y + bounds.height / 2, resolution.getScaledWidth(),
 				resolution.getScaledHeight());
 		position.setAnchor(anchor);
-		position.setScreenPosition(screenX, screenY);
+		position.setScreenPosition(screenX, screenY, elementWidth, elementHeight);
+	}
+
+	private HudEntry findEntry(final Feature feature) {
+		if (feature == null) {
+			return null;
+		}
+		for (final HudEntry entry : this.hudEntries) {
+			if (entry.feature == feature) {
+				return entry;
+			}
+		}
+		return null;
 	}
 
 	private void closeToPrevious() {
@@ -312,10 +327,6 @@ public final class LayoutEditorScreen extends GuiScreen {
 		return this.width >= 320 ? 3 : 2;
 	}
 
-	private static String featureName(final HudFeature feature) {
-		return ((Feature) feature).getName();
-	}
-
 	private static boolean drawBackground() {
 		final GuiFeature guiFeature = OpenUtils.get().getFeatureHandler()
 				.getFeature(GuiFeature.class);
@@ -326,5 +337,13 @@ public final class LayoutEditorScreen extends GuiScreen {
 		final GuiFeature guiFeature = OpenUtils.get().getFeatureHandler()
 				.getFeature(GuiFeature.class);
 		return ConfigColorScheme.byDisplayName(guiFeature.theme).theme();
+	}
+	private static final class HudEntry {
+		private final Feature feature;
+		private final HudFeature hud;
+		private HudEntry(final Feature feature, final HudFeature hud) {
+			this.feature = feature;
+			this.hud = hud;
+		}
 	}
 }

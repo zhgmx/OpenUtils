@@ -22,7 +22,7 @@ public class GuiFeature extends Feature implements KeyboundFeature {
 	@Mode(values = {"minecraft", "catppuccin mocha", "ayu mirage"})
 	public String theme = "minecraft";
 	public GuiFeature() {
-		super("GUI", FeatureCategory.CLIENT);
+		super("Config Screen", FeatureCategory.CLIENT);
 	}
 
 	@Override

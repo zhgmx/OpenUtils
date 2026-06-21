@@ -23,14 +23,6 @@ public final class Position {
 		this.anchor = this.defaultAnchor;
 	}
 
-	public int getX() {
-		return anchor.toScreenX(x, getScreenWidth(), 0);
-	}
-
-	public int getY() {
-		return anchor.toScreenY(y, getScreenHeight(), 0);
-	}
-
 	public int getX(final int elementWidth) {
 		return anchor.toScreenX(x, getScreenWidth(), elementWidth);
 	}
@@ -60,9 +52,10 @@ public final class Position {
 		this.y = y;
 	}
 
-	public void setScreenPosition(final int screenX, final int screenY) {
-		this.x = anchor.fromScreenX(screenX, getScreenWidth(), 0);
-		this.y = anchor.fromScreenY(screenY, getScreenHeight(), 0);
+	public void setScreenPosition(final int screenX, final int screenY, final int elementWidth,
+			final int elementHeight) {
+		this.x = anchor.fromScreenX(screenX, getScreenWidth(), elementWidth);
+		this.y = anchor.fromScreenY(screenY, getScreenHeight(), elementHeight);
 	}
 
 	public void reset() {

@@ -42,32 +42,33 @@ public class UpgradesHudFeature extends ToggleableFeature implements HudFeature 
 	private void onChatReceived(final ReceiveChatEvent event) {
 		if (!ClientUtil.notNull())
 			return;
-		if (GameModeUtil.getBedWarsStatus() != 3)
+		if (!GameModeUtil.isInBedWarsGame())
 			return;
 		final String message = TextUtil.stripColorCodes(event.getMessage());
 		if (message.contains(":"))
 			return;
+		if (message.contains("Trap was set off!") || message.contains("Trap from the queue!")) {
+			if (!trapQueue.isEmpty()) {
+				trapQueue.remove(0);
+			}
+			return;
+		}
+		if (!message.contains("purchased")) {
+			return;
+		}
 		final String purchasedPattern = message
 				.substring(message.indexOf("purchased") + "purchased".length());
-		if (message.contains("purchased") && message.contains("Trap")) {
+		if (message.contains("Trap")) {
 			final String trap = purchasedPattern.replace("Trap", "").trim();
 			trapQueue.add(trap);
-		} else if (message.contains("purchased") && message.contains("Reinforced Armor")) {
+		} else if (message.contains("Reinforced Armor")) {
 			protUpgrades.clear();
 			final String armor = purchasedPattern.replace("Reinforced Armor", "").trim();
 			protUpgrades.add(armor);
-		} else if (message.contains("purchased") && message.contains("Sharpened Swords")) {
+		} else if (message.contains("Sharpened Swords")) {
 			sharpUpgrades.clear();
 			final String sharp = purchasedPattern.replace("Sharpened Swords", "").trim();
 			sharpUpgrades.add(sharp);
-		} else if (message.contains("Trap was set off!")) {
-			if (!trapQueue.isEmpty()) {
-				trapQueue.remove(0);
-			}
-		} else if (message.contains("Trap from the queue!")) {
-			if (!trapQueue.isEmpty()) {
-				trapQueue.remove(0);
-			}
 		}
 	}
 
@@ -77,12 +78,13 @@ public class UpgradesHudFeature extends ToggleableFeature implements HudFeature 
 			return;
 		if (mc.gameSettings.showDebugInfo)
 			return;
-		if (GameModeUtil.getBedWarsStatus() != 3)
+		if (!GameModeUtil.isInBedWarsGame())
 			return;
-		int y = position.getY();
+		final int x = position.getX(getHudPreviewWidth());
+		int y = position.getY(getHudPreviewHeight());
 		int delta = 0;
 		for (final String line : buildLines()) {
-			mc.fontRendererObj.drawString(line, position.getX(), y, 0xFFFFFFFF, useHudDropShadow());
+			mc.fontRendererObj.drawString(line, x, y, 0xFFFFFFFF, useHudDropShadow());
 			y += mc.fontRendererObj.FONT_HEIGHT + 2;
 			delta -= 90;
 		}
@@ -92,7 +94,7 @@ public class UpgradesHudFeature extends ToggleableFeature implements HudFeature 
 	private void onTick(final GameTickEvent event) {
 		if (event.getPhase() != EventPhase.POST)
 			return;
-		if (GameModeUtil.getBedWarsStatus() != 3) {
+		if (!GameModeUtil.isInBedWarsGame()) {
 			resetTracking();
 		}
 	}

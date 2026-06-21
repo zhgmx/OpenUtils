@@ -1,7 +1,11 @@
 package org.afterlike.openutils.feature.impl.bedwars;
 
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.function.BooleanSupplier;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,7 +29,6 @@ import re.tsuku.confikure.annotations.Dropdown;
 import re.tsuku.confikure.annotations.Option;
 import re.tsuku.fastbus.Subscribe;
 
-// TODO: we should probably rewrite at some point...
 public class ItemAlertsFeature extends ToggleableFeature {
 	private static final long COOLDOWN_TIME = 10_000L;
 	@Option(name = "Enable Item Alerts",
@@ -185,7 +188,7 @@ public class ItemAlertsFeature extends ToggleableFeature {
 		if (!ClientUtil.notNull()) {
 			return;
 		}
-		if (GameModeUtil.getBedWarsStatus() != 3) {
+		if (!GameModeUtil.isInBedWarsGame()) {
 			return;
 		}
 		if (!(event.getPacket() instanceof S04PacketEntityEquipment)) {

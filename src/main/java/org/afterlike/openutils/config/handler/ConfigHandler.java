@@ -9,6 +9,8 @@ import org.afterlike.openutils.OpenUtils;
 import org.afterlike.openutils.config.HudLayoutStore;
 import org.afterlike.openutils.config.OpenUtilsConfig;
 import org.afterlike.openutils.gui.OpenUtilsConfigScreen;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import re.tsuku.confikure.Confikure;
 import re.tsuku.confikure.forge.internal.ClientTickScheduler;
 import re.tsuku.confikure.gui.ConfigGuiState;
@@ -20,6 +22,7 @@ import re.tsuku.confikure.model.OptionListener;
 import re.tsuku.confikure.persistence.ConfigStore;
 
 public class ConfigHandler {
+	private static final Logger LOGGER = LogManager.getLogger(ConfigHandler.class);
 	private final ConfigStore store = new ConfigStore();
 	private final HudLayoutStore hudLayoutStore = new HudLayoutStore();
 	private OpenUtilsConfig config;
@@ -34,9 +37,15 @@ public class ConfigHandler {
 		this.loading = true;
 		try {
 			this.store.load(this.definition, path, this.guiState);
+		} catch (final IOException | RuntimeException caught) {
+			LOGGER.warn("Failed to load config from {}", path, caught);
+		}
+		final Path hudLayoutPath = getHudLayoutPath();
+		try {
 			this.hudLayoutStore.load(OpenUtils.get().getFeatureHandler().getFeatures(),
-					getHudLayoutPath());
-		} catch (final IOException ignored) {
+					hudLayoutPath);
+		} catch (final IOException | RuntimeException caught) {
+			LOGGER.warn("Failed to load HUD layout from {}", hudLayoutPath, caught);
 		} finally {
 			this.loading = false;
 		}
@@ -48,11 +57,18 @@ public class ConfigHandler {
 		if (this.loading) {
 			return;
 		}
+		final Path configPath = getConfigPath();
 		try {
-			this.store.save(getDefinition(), getGuiState(), getConfigPath());
+			this.store.save(getDefinition(), getGuiState(), configPath);
+		} catch (final IOException | RuntimeException caught) {
+			LOGGER.warn("Failed to save config to {}", configPath, caught);
+		}
+		final Path hudLayoutPath = getHudLayoutPath();
+		try {
 			this.hudLayoutStore.save(OpenUtils.get().getFeatureHandler().getFeatures(),
-					getHudLayoutPath());
-		} catch (final IOException ignored) {
+					hudLayoutPath);
+		} catch (final IOException | RuntimeException caught) {
+			LOGGER.warn("Failed to save HUD layout to {}", hudLayoutPath, caught);
 		}
 	}
 
@@ -141,7 +157,8 @@ public class ConfigHandler {
 		final Path dir = Paths.get(mc.mcDataDir.getAbsolutePath(), "config", "openutils");
 		try {
 			Files.createDirectories(dir);
-		} catch (final IOException ignored) {
+		} catch (final IOException caught) {
+			LOGGER.warn("Failed to create config directory {}", dir, caught);
 		}
 		return dir;
 	}

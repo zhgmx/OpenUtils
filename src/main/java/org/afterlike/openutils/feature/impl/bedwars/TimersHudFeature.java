@@ -74,8 +74,7 @@ public class TimersHudFeature extends ToggleableFeature implements HudFeature {
 	private void onTick(final GameTickEvent event) {
 		if (event.getPhase() != EventPhase.POST)
 			return;
-		final int status = GameModeUtil.getBedWarsStatus();
-		if (status == 3) {
+		if (GameModeUtil.isInBedWarsGame()) {
 			if (!inGame) {
 				startGame();
 			} else {
@@ -96,8 +95,8 @@ public class TimersHudFeature extends ToggleableFeature implements HudFeature {
 		if (!ClientUtil.notNull() || mc.gameSettings.showDebugInfo || !inGame) {
 			return;
 		}
-		final int x = position.getX();
-		int y = position.getY();
+		final int x = position.getX(getHudPreviewWidth());
+		int y = position.getY(getHudPreviewHeight());
 		int delta = 0;
 		if (showElapsedTime) {
 			drawLine("§eGame Time: §f" + formatTime(elapsedTime), x, y, delta);

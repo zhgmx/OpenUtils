@@ -2,7 +2,13 @@ package org.afterlike.openutils.feature.impl.render;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
 import org.afterlike.openutils.event.api.EventPhase;
@@ -117,6 +123,9 @@ public class DamageTagsFeature extends ToggleableFeature {
 			if (!showHealingValue && health > lastHealth)
 				continue;
 			final float difference = health - lastHealth;
+			final long roundedDifference = Math.round(Math.abs(difference));
+			if (roundedDifference == 0L)
+				continue;
 			final int baseColor = (health > lastHealth) ? GREEN : RED;
 			final String renderHealth;
 			if (teamColor) {
@@ -126,10 +135,8 @@ public class DamageTagsFeature extends ToggleableFeature {
 						: "§r";
 				renderHealth = teamColorCode + formatDoubleStr(Math.round(difference));
 			} else {
-				renderHealth = formatDoubleStr(Math.round(Math.abs(difference)));
+				renderHealth = formatDoubleStr(roundedDifference);
 			}
-			if (renderHealth.endsWith("0"))
-				continue;
 			final double x = player.posX;
 			final double y = player.posY + yOffsetValue;
 			final double z = player.posZ;

@@ -49,7 +49,7 @@ public class FinalKillsHudFeature extends ToggleableFeature implements HudFeatur
 	private void onChatReceived(final ReceiveChatEvent event) {
 		if (!ClientUtil.notNull())
 			return;
-		if (GameModeUtil.getBedWarsStatus() != 3)
+		if (!GameModeUtil.isInBedWarsGame())
 			return;
 		final String message = event.getMessage();
 		final Matcher finalKillMarker = FINAL_KILL_MARKER_PATTERN.matcher(message);
@@ -92,19 +92,19 @@ public class FinalKillsHudFeature extends ToggleableFeature implements HudFeatur
 			return;
 		if (mc.gameSettings.showDebugInfo)
 			return;
-		if (GameModeUtil.getBedWarsStatus() != 3)
+		if (!GameModeUtil.isInBedWarsGame())
 			return;
 		if (finalKills.isEmpty())
 			return;
-		final int[] y = {position.getY()};
+		final int x = position.getX(getHudPreviewWidth());
+		final int[] y = {position.getY(getHudPreviewHeight())};
 		finalKills.entrySet().stream().sorted(Map.Entry.comparingByValue()).forEach(entry -> {
 			if (!entry.getKey().equals(VOID_KEY) || showVoidKills) {
 				final String displayName = entry.getKey().equals(VOID_KEY)
 						? VOID_KEY
 						: entry.getKey();
 				final String line = "§r" + displayName + ": §f" + entry.getValue();
-				mc.fontRendererObj.drawString(line, position.getX(), y[0], 0xFFFFFFFF,
-						useHudDropShadow());
+				mc.fontRendererObj.drawString(line, x, y[0], 0xFFFFFFFF, useHudDropShadow());
 				y[0] += mc.fontRendererObj.FONT_HEIGHT + 2;
 			}
 		});
@@ -114,7 +114,7 @@ public class FinalKillsHudFeature extends ToggleableFeature implements HudFeatur
 	private void onTick(final GameTickEvent event) {
 		if (event.getPhase() != EventPhase.POST)
 			return;
-		if (GameModeUtil.getBedWarsStatus() != 3) {
+		if (!GameModeUtil.isInBedWarsGame()) {
 			resetTracking();
 		} else if (ClientUtil.notNull() && playerTeamColor == null) {
 			playerTeamColor = BedWarsUtil.getTeamColor(mc.thePlayer);
@@ -155,8 +155,8 @@ public class FinalKillsHudFeature extends ToggleableFeature implements HudFeatur
 	@Override
 	public String[] getHudPreviewLines() {
 		return showVoidKills
-				? new String[]{"§aSteve: §f2", "§bAlex: §f1", VOID_KEY + ": §f1"}
-				: new String[]{"§aSteve: §f2", "§bAlex: §f1"};
+				? new String[]{"§cRedPlayer: §f2", "§bBluePlayer: §f1", VOID_KEY + ": §f1"}
+				: new String[]{"§cRedPlayer: §f2", "§bBluePlayer: §f1"};
 	}
 
 	@Override

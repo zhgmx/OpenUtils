@@ -27,6 +27,8 @@ public final class HudLayoutStore {
 		final Map<String, Entry> entries;
 		try (Reader reader = Files.newBufferedReader(path)) {
 			entries = GSON.fromJson(reader, DATA_TYPE);
+		} catch (final RuntimeException caught) {
+			throw new IOException("Invalid HUD layout JSON", caught);
 		}
 		if (entries == null) {
 			return;
@@ -35,7 +37,9 @@ public final class HudLayoutStore {
 			if (!(feature instanceof HudFeature)) {
 				continue;
 			}
-			final Entry entry = entries.get(feature.getName());
+			final Entry entry = entries.containsKey(feature.getId())
+					? entries.get(feature.getId())
+					: entries.get(feature.getName());
 			if (entry == null) {
 				continue;
 			}
@@ -60,7 +64,7 @@ public final class HudLayoutStore {
 			entry.x = position.getOffsetX();
 			entry.y = position.getOffsetY();
 			entry.anchor = position.getAnchor().name();
-			entries.put(feature.getName(), entry);
+			entries.put(feature.getId(), entry);
 		}
 		final Path parent = path.getParent();
 		if (parent != null) {
