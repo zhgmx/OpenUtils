@@ -16,7 +16,6 @@ import org.afterlike.openutils.util.client.ClientUtil;
 import org.afterlike.openutils.util.client.TextUtil;
 import org.afterlike.openutils.util.game.GameModeUtil;
 import org.afterlike.openutils.util.game.WorldUtil;
-import re.tsuku.confikure.annotations.Button;
 import re.tsuku.confikure.annotations.Option;
 import re.tsuku.fastbus.Subscribe;
 
@@ -147,12 +146,6 @@ public class TimersHudFeature extends ToggleableFeature implements HudFeature {
 	@Override
 	public boolean useHudDropShadow() {
 		return dropShadow;
-	}
-
-	@Button(name = "Layout Editor", description = "Open the layout editor with Timers selected.",
-			label = "layout", order = 3)
-	public void editPosition() {
-		openHudEditor();
 	}
 
 	private void detectMode() {

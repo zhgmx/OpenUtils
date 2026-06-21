@@ -4,13 +4,14 @@ import org.afterlike.openutils.event.impl.GameTickEvent;
 import org.afterlike.openutils.event.impl.WorldLoadEvent;
 import org.afterlike.openutils.feature.api.Feature;
 import org.afterlike.openutils.feature.api.FeatureCategory;
+import org.afterlike.openutils.feature.api.KeyboundFeature;
 import org.afterlike.openutils.util.client.ClientUtil;
 import org.lwjgl.input.Keyboard;
 import re.tsuku.confikure.annotations.Keybind;
 import re.tsuku.confikure.annotations.Option;
 import re.tsuku.fastbus.Subscribe;
 
-public class FreeLookFeature extends Feature {
+public class FreeLookFeature extends Feature implements KeyboundFeature {
 	@Option(name = "Keybind", description = "Hold this key to detach the third-person camera.",
 			order = 0)
 	@Keybind
@@ -33,12 +34,16 @@ public class FreeLookFeature extends Feature {
 	private int prevPerspective = 0;
 	public FreeLookFeature() {
 		super("Free Look", FeatureCategory.RENDER);
-		setKeybind(this.keybind);
 	}
 
 	@Override
-	public void onConfigChanged() {
-		setKeybind(this.keybind);
+	public int getKeybind() {
+		return keybind;
+	}
+
+	@Override
+	public void onKeyInput(final boolean pressed) {
+		setActiveTemporarily(pressed);
 	}
 
 	private void enter() {
@@ -106,14 +111,14 @@ public class FreeLookFeature extends Feature {
 	@Subscribe
 	private void onWorldLoad(final WorldLoadEvent event) {
 		if (isEnabled()) {
-			setEnabled(false);
+			setActiveTemporarily(false);
 		}
 	}
 
 	@Subscribe
 	private void onGameTick(final GameTickEvent event) {
 		if (isEnabled() && mc.currentScreen != null) {
-			setEnabled(false);
+			setActiveTemporarily(false);
 		}
 	}
 

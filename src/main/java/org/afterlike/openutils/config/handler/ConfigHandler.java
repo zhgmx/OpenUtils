@@ -57,8 +57,7 @@ public class ConfigHandler {
 	}
 
 	public OpenUtilsConfigScreen createGuiScreen() {
-		return new OpenUtilsConfigScreen(getDefinition(), getConfigPath(), this.store,
-				getGuiState());
+		return new OpenUtilsConfigScreen(getDefinition(), getGuiState(), this::saveGuiState);
 	}
 
 	public void openGui() {
@@ -122,6 +121,11 @@ public class ConfigHandler {
 	private static void applyConfigToFeatures() {
 		OpenUtils.get().getFeatureHandler().applyConfiguredStates();
 		OpenUtils.get().getFeatureHandler().notifyConfigChanged();
+	}
+
+	private void saveGuiState(final ConfigGuiState guiState) {
+		this.guiState = guiState;
+		saveConfiguration();
 	}
 
 	private static Path getConfigPath() {

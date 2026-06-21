@@ -3,6 +3,7 @@ package org.afterlike.openutils.feature.impl.client;
 import org.afterlike.openutils.OpenUtils;
 import org.afterlike.openutils.feature.api.Feature;
 import org.afterlike.openutils.feature.api.FeatureCategory;
+import org.afterlike.openutils.feature.api.KeyboundFeature;
 import org.afterlike.openutils.gui.OpenUtilsConfigScreen;
 import org.afterlike.openutils.util.client.ClientUtil;
 import org.lwjgl.input.Keyboard;
@@ -10,7 +11,7 @@ import re.tsuku.confikure.annotations.Keybind;
 import re.tsuku.confikure.annotations.Mode;
 import re.tsuku.confikure.annotations.Option;
 
-public class GuiFeature extends Feature {
+public class GuiFeature extends Feature implements KeyboundFeature {
 	@Option(name = "Keybind", description = "Opens the config screen.", order = 0)
 	@Keybind
 	public int keybind = Keyboard.KEY_RSHIFT;
@@ -22,19 +23,18 @@ public class GuiFeature extends Feature {
 	public String theme = "minecraft";
 	public GuiFeature() {
 		super("GUI", FeatureCategory.CLIENT);
-		setKeybind(this.keybind);
 	}
 
 	@Override
-	public void onConfigChanged() {
-		setKeybind(this.keybind);
+	public int getKeybind() {
+		return keybind;
 	}
 
 	@Override
-	protected void onEnable() {
-		if (ClientUtil.notNull() && !(mc.currentScreen instanceof OpenUtilsConfigScreen)) {
+	public void onKeyInput(final boolean pressed) {
+		if (pressed && ClientUtil.notNull()
+				&& !(mc.currentScreen instanceof OpenUtilsConfigScreen)) {
 			OpenUtils.get().getConfigHandler().openGui();
 		}
-		this.setEnabled(false);
 	}
 }

@@ -13,7 +13,6 @@ import org.afterlike.openutils.feature.api.hud.HudFeature;
 import org.afterlike.openutils.feature.api.hud.Position;
 import org.afterlike.openutils.util.client.ClientUtil;
 import org.afterlike.openutils.util.game.RenderUtil;
-import re.tsuku.confikure.annotations.Button;
 import re.tsuku.confikure.annotations.Option;
 import re.tsuku.confikure.annotations.Range;
 import re.tsuku.fastbus.Subscribe;
@@ -202,12 +201,5 @@ public class TargetHudFeature extends ToggleableFeature implements HudFeature {
 	@Override
 	public boolean useHudDropShadow() {
 		return dropShadow;
-	}
-
-	@Button(name = "Layout Editor",
-			description = "Open the layout editor with Target HUD selected.", label = "layout",
-			order = 7)
-	public void editPosition() {
-		openHudEditor();
 	}
 }

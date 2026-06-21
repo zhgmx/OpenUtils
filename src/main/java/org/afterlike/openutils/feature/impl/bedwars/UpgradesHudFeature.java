@@ -13,7 +13,6 @@ import org.afterlike.openutils.feature.api.hud.Position;
 import org.afterlike.openutils.util.client.ClientUtil;
 import org.afterlike.openutils.util.client.TextUtil;
 import org.afterlike.openutils.util.game.GameModeUtil;
-import re.tsuku.confikure.annotations.Button;
 import re.tsuku.confikure.annotations.Option;
 import re.tsuku.fastbus.Subscribe;
 
@@ -153,11 +152,5 @@ public class UpgradesHudFeature extends ToggleableFeature implements HudFeature 
 	@Override
 	public boolean useHudDropShadow() {
 		return dropShadow;
-	}
-
-	@Button(name = "Layout Editor", description = "Open the layout editor with Upgrades selected.",
-			label = "layout", order = 5)
-	public void editPosition() {
-		openHudEditor();
 	}
 }

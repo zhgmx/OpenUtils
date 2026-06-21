@@ -9,7 +9,6 @@ public class Feature {
 	private final FeatureCategory category;
 	private boolean active;
 	private boolean transientEnabled;
-	private int keybind;
 	public Feature(final String name, final FeatureCategory category) {
 		this.name = name;
 		this.category = category;
@@ -27,6 +26,10 @@ public class Feature {
 
 	public void applyConfiguredState() {
 		setActive(isConfiguredEnabled());
+	}
+
+	public void setActiveTemporarily(final boolean enabled) {
+		setActive(enabled);
 	}
 
 	private void setActive(final boolean enabled) {
@@ -63,14 +66,6 @@ public class Feature {
 
 	public FeatureCategory getCategory() {
 		return category;
-	}
-
-	public int getKeybind() {
-		return keybind;
-	}
-
-	public void setKeybind(final int keybind) {
-		this.keybind = keybind;
 	}
 
 	protected void onEnable() {

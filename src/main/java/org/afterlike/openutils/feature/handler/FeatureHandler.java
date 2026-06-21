@@ -6,6 +6,7 @@ import org.afterlike.openutils.OpenUtils;
 import org.afterlike.openutils.event.impl.KeyPressEvent;
 import org.afterlike.openutils.feature.api.Feature;
 import org.afterlike.openutils.feature.api.FeatureCategory;
+import org.afterlike.openutils.feature.api.KeyboundFeature;
 import org.afterlike.openutils.feature.impl.bedwars.*;
 import org.afterlike.openutils.feature.impl.client.*;
 import org.afterlike.openutils.feature.impl.hypixel.*;
@@ -120,15 +121,12 @@ public class FeatureHandler {
 		}
 		final boolean pressed = event.isPressed();
 		for (final Feature feature : getFeatures()) {
-			if (feature.getKeybind() == keyCode) {
-				// Free Look requires keybind to be held
-				if (feature instanceof FreeLookFeature) {
-					feature.setEnabled(pressed);
-				} else {
-					if (pressed) {
-						feature.toggle();
-					}
-				}
+			if (!(feature instanceof KeyboundFeature)) {
+				continue;
+			}
+			final KeyboundFeature keyboundFeature = (KeyboundFeature) feature;
+			if (keyboundFeature.getKeybind() == keyCode) {
+				keyboundFeature.onKeyInput(pressed);
 			}
 		}
 	}

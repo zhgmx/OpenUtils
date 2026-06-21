@@ -1,10 +1,9 @@
 package org.afterlike.openutils.gui;
 
 import java.io.IOException;
-import java.nio.file.Path;
+import java.util.function.Consumer;
 import net.minecraft.client.gui.GuiScreen;
 import org.afterlike.openutils.OpenUtils;
-import org.afterlike.openutils.config.handler.ConfigHandler;
 import org.afterlike.openutils.feature.impl.client.GuiFeature;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -19,23 +18,20 @@ import re.tsuku.confikure.gui.platform.GuiRenderer;
 import re.tsuku.confikure.model.ConfigCategory;
 import re.tsuku.confikure.model.ConfigDefinition;
 import re.tsuku.confikure.model.ConfigGroup;
-import re.tsuku.confikure.persistence.ConfigStore;
 
 public final class OpenUtilsConfigScreen extends GuiScreen {
 	private static final int SIDEBAR_WIDTH = 112;
 	private static final int SIDEBAR_FOOTER_HEIGHT = 20;
 	private final ConfigDefinition definition;
-	private final Path path;
-	private final ConfigStore store;
 	private final ConfigGuiState guiState;
+	private final Consumer<ConfigGuiState> closeHandler;
 	private ConfigGui gui;
 	private ForgeGuiRenderer renderer;
-	public OpenUtilsConfigScreen(final ConfigDefinition definition, final Path path,
-			final ConfigStore store, final ConfigGuiState guiState) {
+	public OpenUtilsConfigScreen(final ConfigDefinition definition, final ConfigGuiState guiState,
+			final Consumer<ConfigGuiState> closeHandler) {
 		this.definition = definition;
-		this.path = path;
-		this.store = store == null ? new ConfigStore() : store;
-		this.guiState = guiState == null ? ConfigHandler.defaultGuiState(definition) : guiState;
+		this.guiState = guiState;
+		this.closeHandler = closeHandler;
 	}
 
 	@Override
@@ -47,7 +43,8 @@ public final class OpenUtilsConfigScreen extends GuiScreen {
 				return name == null ? String.valueOf(keyCode) : name.toLowerCase();
 			}
 		});
-		new OpenUtilsConfigurator().accept(this.gui);
+		this.gui.themeSupplier(OpenUtilsConfigScreen::currentTheme);
+		this.gui.sidebarHeader(new OpenUtilsSidebarHeader());
 		this.renderer = new ForgeGuiRenderer(this.mc);
 		Keyboard.enableRepeatEvents(true);
 		this.gui.state(this.guiState);
@@ -134,12 +131,8 @@ public final class OpenUtilsConfigScreen extends GuiScreen {
 		if (this.gui != null) {
 			copyState(this.definition, this.gui.state(), this.guiState);
 		}
-		if (this.path != null) {
-			try {
-				this.store.save(this.definition, this.guiState, this.path);
-			} catch (final IOException exception) {
-				throw new IllegalStateException("Unable to save config: " + this.path, exception);
-			}
+		if (this.closeHandler != null) {
+			this.closeHandler.accept(this.guiState);
 		}
 	}
 
@@ -206,21 +199,6 @@ public final class OpenUtilsConfigScreen extends GuiScreen {
 					target.collapsed(category.id(), group.id(), true);
 				}
 			}
-		}
-	}
-	private static final class OpenUtilsConfigurator
-			implements
-				java.util.function.Consumer<ConfigGui> {
-		public void accept(final ConfigGui gui) {
-			gui.themeSupplier(new OpenUtilsThemeSupplier());
-			gui.sidebarHeader(new OpenUtilsSidebarHeader());
-		}
-	}
-	private static final class OpenUtilsThemeSupplier
-			implements
-				java.util.function.Supplier<ConfigTheme> {
-		public ConfigTheme get() {
-			return currentTheme();
 		}
 	}
 	private static final class OpenUtilsSidebarHeader implements ConfigGui.SidebarHeader {
