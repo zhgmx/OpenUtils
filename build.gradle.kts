@@ -100,7 +100,7 @@ dependencies {
 
     shade("com.google.code.gson:gson:2.13.2")
     shade("re.tsuku:fastbus:1.1.1")
-    shade("re.tsuku:confikure:1.1.1")
+    shade("re.tsuku:confikure:1.1.3")
     shade("org.spongepowered:mixin:0.7.11-SNAPSHOT") {
         isTransitive = false
     }
